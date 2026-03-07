@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>दोहा संग्रह — विस्तृत विश्लेषण</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Cinzel+Decorative:wght@400;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08070c;--bg2:#100e18;--bg3:#18162280;--bg4:#1e1b2c;
+  --gold:#c9a84c;--gold2:#e8c96a;--gold3:#f5d87a;
+  --text:#f0e6ff;--muted:#6e648a;--border:#252235;
+  --red:#e05c6a;--blue:#5b9cf6;--green:#4ecb8d;--purple:#9d7df5;
+  --orange:#f0974a;--pink:#e84fa5;--teal:#3ecfcf;--amber:#f5c842;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Tiro Devanagari Hindi',serif;min-height:100vh;overflow-x:hidden;}
+
+/* GRAIN */
+body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:999;opacity:0.5;}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:200;background:#08070cee;backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:0;overflow-x:auto;}
+.nav-brand{font-family:'Cinzel Decorative',cursive;font-size:0.6rem;color:var(--gold);letter-spacing:0.25em;margin-right:20px;padding:15px 0;white-space:nowrap;flex-shrink:0;}
+.nav-tab{padding:15px 14px;font-size:0.7rem;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;font-family:'DM Mono',monospace;letter-spacing:0.04em;flex-shrink:0;}
+.nav-tab:hover{color:var(--text);}
+.nav-tab.active{color:var(--gold2);border-bottom-color:var(--gold);}
+
+/* PANELS */
+.panel{display:none;padding:32px 20px 80px;max-width:1440px;margin:0 auto;animation:fadeUp 0.4s ease;}
+.panel.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* PAGE HEADER */
+.page-header{text-align:center;padding:10px 0 36px;}
+.page-header h1{font-size:clamp(1.6rem,4vw,3rem);font-weight:400;background:linear-gradient(135deg,var(--gold3),var(--orange),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.page-header p{color:var(--muted);font-style:italic;font-size:0.85rem;margin-top:6px;}
+
+/* STATS STRIP */
+.stats-strip{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:36px;}
+.stat{background:var(--bg2);border:1px solid var(--border);padding:16px 20px;flex:1;min-width:120px;border-top:2px solid var(--sc,var(--gold));transition:transform 0.2s;}
+.stat:hover{transform:translateY(-2px);}
+.stat-n{font-family:'DM Mono',monospace;font-size:1.8rem;color:var(--gold2);display:block;line-height:1;}
+.stat-l{font-size:0.65rem;color:var(--muted);margin-top:5px;letter-spacing:0.08em;}
+
+/* SECTION TITLE */
+.sec{font-family:'Cinzel Decorative',cursive;font-size:0.6rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase;margin:36px 0 16px;display:flex;align-items:center;gap:12px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* CARD */
+.card{background:var(--bg2);border:1px solid var(--border);padding:22px;margin-bottom:2px;}
+.card-t{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:18px;letter-spacing:0.1em;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+@media(max-width:1100px){.g4{grid-template-columns:1fr 1fr;}.g3{grid-template-columns:1fr 1fr;}}
+@media(max-width:700px){.g2,.g3,.g4{grid-template-columns:1fr;}}
+
+/* BAR */
+.brow{display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:default;}
+.bl{font-size:0.75rem;color:var(--text);text-align:right;flex-shrink:0;line-height:1.3;}
+.bt{flex:1;height:18px;background:var(--bg4);overflow:hidden;position:relative;}
+.bf{height:100%;transition:width 1.1s cubic-bezier(.4,0,.2,1);}
+.bv{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);flex-shrink:0;min-width:30px;}
+.brow:hover .bl,.brow:hover .bv{color:var(--gold2);}
+
+/* RADIAL CHART */
+.radial-wrap{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:center;}
+
+/* SCATTER */
+#scatter-svg text{font-family:'DM Mono',monospace;fill:var(--muted);font-size:9px;}
+
+/* HEATMAP */
+.hm-wrap{overflow-x:auto;}
+.hm{border-collapse:collapse;min-width:800px;}
+.hm th{font-size:0.58rem;color:var(--muted);font-family:'DM Mono',monospace;padding:5px 3px;text-align:center;font-weight:400;white-space:nowrap;}
+.hm td{width:42px;height:30px;text-align:center;font-family:'DM Mono',monospace;font-size:0.6rem;cursor:default;transition:transform 0.15s;border:1px solid #08070c;}
+.hm td:hover{transform:scale(1.12);z-index:10;position:relative;box-shadow:0 0 0 2px var(--gold);}
+.hm .rl{font-size:0.68rem;color:var(--text);text-align:right;padding-right:8px;white-space:nowrap;font-family:'Tiro Devanagari Hindi',serif;width:160px;min-width:160px;}
+
+/* AUTHOR CARDS */
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px;}
+.acard{background:var(--bg2);border:1px solid var(--border);padding:16px;border-top:2px solid var(--cc,#666);transition:border-color 0.2s,background 0.2s;cursor:default;}
+.acard:hover{background:var(--bg4);border-color:var(--cc,var(--gold));}
+.aname{font-size:0.9rem;color:var(--gold2);margin-bottom:4px;line-height:1.4;}
+.acount{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:10px;}
+.chips{display:flex;flex-wrap:wrap;gap:3px;}
+.chip{font-size:0.58rem;padding:2px 6px;font-family:'DM Mono',monospace;background:var(--bg4);border:1px solid var(--border);border-radius:1px;}
+
+/* NETWORK SVG */
+#network-svg{width:100%;background:var(--bg2);}
+
+/* WORD CLOUD */
+#wcloud{position:relative;height:280px;overflow:hidden;}
+
+/* DONUT */
+.donut-wrap{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.dleg{flex:1;min-width:150px;display:flex;flex-direction:column;gap:5px;max-height:300px;overflow-y:auto;}
+.li{display:flex;align-items:center;gap:7px;font-size:0.72rem;cursor:default;}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ln{flex:1;}
+.lv{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);}
+
+/* SEARCH/FILTER */
+.sinp{background:var(--bg4);border:1px solid var(--border);padding:9px 14px;width:100%;max-width:380px;color:var(--text);font-family:'Tiro Devanagari Hindi',serif;font-size:0.88rem;outline:none;display:block;margin-bottom:16px;}
+.sinp:focus{border-color:var(--gold);}
+.sinp::placeholder{color:var(--muted);}
+.fbrow{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px;}
+.fb{padding:5px 11px;font-size:0.65rem;border:1px solid var(--border);background:var(--bg4);color:var(--muted);cursor:pointer;font-family:'DM Mono',monospace;transition:all 0.15s;}
+.fb:hover,.fb.on{background:var(--gold);color:#08070c;border-color:var(--gold);}
+
+/* TOOLTIP */
+#tip{position:fixed;background:#100e18ee;border:1px solid var(--gold);padding:10px 14px;font-size:0.75rem;color:var(--text);pointer-events:none;z-index:9999;max-width:240px;line-height:1.6;backdrop-filter:blur(8px);display:none;border-radius:1px;}
+#tip strong{color:var(--gold2);display:block;margin-bottom:3px;font-size:0.82rem;}
+
+/* TIER BADGES */
+.tier{display:inline-block;padding:2px 7px;font-size:0.58rem;font-family:'DM Mono',monospace;border-radius:1px;margin-left:4px;}
+.tier-M{background:#c9a84c22;color:var(--gold);border:1px solid var(--gold)44;}
+.tier-m{background:#5b9cf622;color:var(--blue);border:1px solid var(--blue)44;}
+.tier-n{background:#4ecb8d22;color:var(--green);border:1px solid var(--green)44;}
+.tier-r{background:#6e648a22;color:var(--muted);border:1px solid var(--muted)44;}
+
+/* PROGRESS RING */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.ring-label{font-size:0.65rem;color:var(--muted);font-family:'DM Mono',monospace;text-align:center;max-width:70px;}
+.ring-val{font-size:0.72rem;color:var(--gold2);font-family:'DM Mono',monospace;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--border);}
+</style>
+</head>
+<body>
+<div id="tip"></div>
+
+<nav class="nav">
+  <div class="nav-brand">दोहा · विश्लेषण</div>
+  <div class="nav-tab active" onclick="tab('overview',this)">📊 Overview</div>
+  <div class="nav-tab" onclick="tab('themes',this)">🏷 All 104 Themes</div>
+  <div class="nav-tab" onclick="tab('authors',this)">✍ All 56 Authors</div>
+  <div class="nav-tab" onclick="tab('heatmap',this)">🔥 Heat Matrix</div>
+  <div class="nav-tab" onclick="tab('network',this)">🕸 Theme Network</div>
+  <div class="nav-tab" onclick="tab('scatter',this)">⬡ Author Scatter</div>
+  <div class="nav-tab" onclick="tab('keywords',this)">💬 Keywords</div>
+  <div class="nav-tab" onclick="tab('tiers',this)">📐 Theme Tiers</div>
+  <div class="nav-tab" onclick="tab('insights',this)">💡 Insights</div>
+</nav>
+
+<!-- ══════════════════ OVERVIEW ══════════════════ -->
+<div class="panel active" id="panel-overview">
+  <div class="page-header"><h1>दोहा संग्रह — सम्पूर्ण विश्लेषण</h1><p>7,889 dohas · 56 authors · 104 themes · Complete literary analytics</p></div>
+
+  <div class="stats-strip">
+    <div class="stat" style="--sc:var(--gold)"><span class="stat-n">7,889</span><div class="stat-l">TOTAL DOHAS</div></div>
+    <div class="stat" style="--sc:var(--pink)"><span class="stat-n">56</span><div class="stat-l">UNIQUE AUTHORS</div></div>
+    <div class="stat" style="--sc:var(--blue)"><span class="stat-n">104</span><div class="stat-l">UNIQUE THEMES</div></div>
+    <div class="stat" style="--sc:var(--green)"><span class="stat-n">809</span><div class="stat-l">प्रेम — TOP THEME</div></div>
+    <div class="stat" style="--sc:var(--orange)"><span class="stat-n">911</span><div class="stat-l">रसलीन — TOP AUTHOR</div></div>
+    <div class="stat" style="--sc:var(--purple)"><span class="stat-n">61</span><div class="stat-l">MAX THEME DIVERSITY</div></div>
+    <div class="stat" style="--sc:var(--teal)"><span class="stat-n">20</span><div class="stat-l">MAJOR THEMES (≥100)</div></div>
+    <div class="stat" style="--sc:var(--red)"><span class="stat-n">36</span><div class="stat-l">RARE THEMES (≤4)</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card"><div class="card-t">TOP 20 THEMES BY DOHA COUNT</div><div id="ov-theme-bars" style="max-height:380px;overflow-y:auto;padding-right:4px;"></div></div>
+    <div class="card"><div class="card-t">ALL 104 THEMES — PROPORTIONAL LANDSCAPE</div><div id="ov-bubbles" style="position:relative;height:380px;overflow:hidden;"></div></div>
+  </div>
+
+  <div class="g2" style="margin-top:2px">
+    <div class="card"><div class="card-t">ALL 56 AUTHORS BY DOHA COUNT</div><div id="ov-author-bars" style="max-height:400px;overflow-y:auto;padding-right:4px;"></div></div>
+    <div class="card">
+      <div class="card-t">AUTHOR SHARE OF COLLECTION</div>
+      <div class="donut-wrap">
+        <canvas id="donut-c" width="200" height="200" style="flex-shrink:0;"></canvas>
+        <div class="dleg" id="donut-leg"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">Theme Category Breakdown</div>
+  <div class="g4" id="cat-grid"></div>
+</div>
+
+<!-- ══════════════════ ALL THEMES ══════════════════ -->
+<div class="panel" id="panel-themes">
+  <div class="sec">All 104 Themes — Complete Listing</div>
+  <div class="fbrow" id="tier-filters">
+    <button class="fb on" onclick="filterTier('all',this)">All (104)</button>
+    <button class="fb" onclick="filterTier('major',this)">⭐ Major ≥100 (20)</button>
+    <button class="fb" onclick="filterTier('mid',this)">◎ Mid 20–99 (30)</button>
+    <button class="fb" onclick="filterTier('minor',this)">○ Minor 5–19 (18)</button>
+    <button class="fb" onclick="filterTier('rare',this)">· Rare &lt;5 (36)</button>
+  </div>
+  <input class="sinp" id="tsearch" placeholder="विषय खोजें · Search themes..." oninput="searchT(this.value)">
+  <div class="g2">
+    <div class="card" style="padding:0;">
+      <table style="width:100%;border-collapse:collapse;" id="ttable">
+        <thead style="background:var(--bg4);border-bottom:2px solid var(--border);">
+          <tr>
+            <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);cursor:pointer;" onclick="sortTable('rank')">RANK ↕</td>
+            <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);cursor:pointer;" onclick="sortTable('name')">THEME ↕</td>
+            <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);cursor:pointer;" onclick="sortTable('count')">COUNT ↕</td>
+            <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);">BAR</td>
+          </tr>
+        </thead>
+        <tbody id="ttbody" style="max-height:600px;overflow-y:auto;"></tbody>
+      </table>
+    </div>
+    <div class="card"><div class="card-t">ALL THEMES — HORIZONTAL BARS</div><div id="all-theme-bars" style="max-height:620px;overflow-y:auto;padding-right:4px;"></div></div>
+  </div>
+
+  <div class="sec" style="margin-top:24px">Theme Distribution — Tier Rings</div>
+  <div class="card"><div class="card-t">THEME TIERS: VISUAL PROPORTION RINGS</div><div id="tier-rings" style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;padding:12px 0;"></div></div>
+</div>
+
+<!-- ══════════════════ ALL AUTHORS ══════════════════ -->
+<div class="panel" id="panel-authors">
+  <div class="sec">All 56 Authors — Profiles & Analytics</div>
+  <div class="fbrow" id="size-filters">
+    <button class="fb on" onclick="filterA('all',this)">All (56)</button>
+    <button class="fb" onclick="filterA('major',this)">Major ≥100</button>
+    <button class="fb" onclick="filterA('mid',this)">Mid 50–99</button>
+    <button class="fb" onclick="filterA('minor',this)">Minor &lt;50</button>
+  </div>
+  <input class="sinp" id="asearch" placeholder="लेखक खोजें · Search authors..." oninput="searchA(this.value)">
+  <div class="agrid" id="acards"></div>
+
+  <div class="sec" style="margin-top:36px;">Author Metrics Comparison</div>
+  <div class="g2">
+    <div class="card"><div class="card-t">PRODUCTIVITY: DOHAS PER THEME (FOCUS INDEX)</div><div id="prod-bars" style="max-height:480px;overflow-y:auto;padding-right:4px;"></div></div>
+    <div class="card"><div class="card-t">THEME DIVERSITY: UNIQUE THEMES PER AUTHOR</div><div id="div-bars" style="max-height:480px;overflow-y:auto;padding-right:4px;"></div></div>
+  </div>
+
+  <div class="sec" style="margin-top:24px;">Signature Themes — Author Identities</div>
+  <div class="card"><div class="card-t">EACH AUTHOR'S DOMINANT / SIGNATURE THEME</div><div id="sig-grid" style="display:flex;flex-wrap:wrap;gap:4px;"></div></div>
+</div>
+
+<!-- ══════════════════ HEAT MATRIX ══════════════════ -->
+<div class="panel" id="panel-heatmap">
+  <div class="sec">Author × Theme Heat Matrix</div>
+  <div class="card"><div class="card-t">ALL AUTHORS (ROWS) × TOP 15 THEMES (COLS) — HOVER FOR DETAILS · DARKER = MORE DOHAS</div>
+    <div class="hm-wrap"><table class="hm" id="hmtable"></table></div>
+  </div>
+
+  <div class="sec" style="margin-top:36px;">Per-Author Full Breakdown</div>
+  <div class="card">
+    <div class="card-t">SELECT AUTHOR FOR DETAILED THEME CHART</div>
+    <div class="fbrow" id="author-sel-row" style="max-height:120px;overflow-y:auto;"></div>
+    <div id="author-detail"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ NETWORK ══════════════════ -->
+<div class="panel" id="panel-network">
+  <div class="sec">Theme Co-occurrence Network</div>
+  <div class="card">
+    <div class="card-t">THEMES CONNECTED BY SHARED AUTHORS — THICKER LINE = MORE AUTHORS IN COMMON · HOVER NODES & EDGES</div>
+    <svg id="network-svg" height="520" viewBox="0 0 900 520"></svg>
+  </div>
+  <div class="sec" style="margin-top:24px;">Theme Pair Connections Table</div>
+  <div class="card"><div class="card-t">TOP THEME PAIRS BY SHARED AUTHOR COUNT</div><div id="pairs-table"></div></div>
+</div>
+
+<!-- ══════════════════ SCATTER ══════════════════ -->
+<div class="panel" id="panel-scatter">
+  <div class="sec">Author Analytics — Scatter Plots</div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-t">PRODUCTIVITY VS DIVERSITY (SIZE = TOTAL DOHAS)</div>
+      <svg id="scatter-svg" width="100%" height="380" viewBox="0 0 520 380" style="overflow:visible;"></svg>
+    </div>
+    <div class="card">
+      <div class="card-t">AUTHOR PROFILE — RADAR / SPIDER CHART</div>
+      <div style="text-align:center;margin-bottom:12px;">
+        <select id="radar-sel" style="background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:7px 12px;font-size:0.8rem;outline:none;font-family:inherit;width:100%;max-width:320px;">
+          <option value="">— Select Author —</option>
+        </select>
+      </div>
+      <canvas id="radar-canvas" width="320" height="280" style="display:block;margin:0 auto;"></canvas>
+    </div>
+  </div>
+  <div class="sec" style="margin-top:24px;">Author Ranking Table</div>
+  <div class="card"><div class="card-t">FULL AUTHOR METRICS TABLE — CLICK HEADERS TO SORT</div>
+    <div style="overflow-x:auto;"><table id="metrics-table" style="width:100%;border-collapse:collapse;min-width:600px;"></table></div>
+  </div>
+</div>
+
+<!-- ══════════════════ KEYWORDS ══════════════════ -->
+<div class="panel" id="panel-keywords">
+  <div class="sec">Keyword Analysis — Core Messages</div>
+  <div class="g2">
+    <div class="card"><div class="card-t">TOP 50 KEYWORDS FROM ALL CORE MESSAGES</div><div id="kw-bars" style="max-height:520px;overflow-y:auto;padding-right:4px;"></div></div>
+    <div class="card"><div class="card-t">KEYWORD WORD CLOUD</div><div id="wcloud"></div></div>
+  </div>
+  <div class="sec" style="margin-top:24px;">Keywords by Theme</div>
+  <div class="card">
+    <div class="card-t">SELECT THEME TO SEE ITS CHARACTERISTIC KEYWORDS</div>
+    <select id="theme-kw-sel" style="background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-size:0.82rem;outline:none;font-family:inherit;max-width:320px;margin-bottom:16px;display:block;">
+      <option value="">— Select a Theme —</option>
+    </select>
+    <div id="theme-kw-chart"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ THEME TIERS ══════════════════ -->
+<div class="panel" id="panel-tiers">
+  <div class="sec">Theme Tiers — 4-Level Classification</div>
+  <div class="stats-strip">
+    <div class="stat" style="--sc:var(--gold)"><span class="stat-n">20</span><div class="stat-l">⭐ MAJOR (≥100 dohas)</div></div>
+    <div class="stat" style="--sc:var(--blue)"><span class="stat-n">30</span><div class="stat-l">◎ MID (20–99 dohas)</div></div>
+    <div class="stat" style="--sc:var(--green)"><span class="stat-n">18</span><div class="stat-l">○ MINOR (5–19 dohas)</div></div>
+    <div class="stat" style="--sc:var(--muted)"><span class="stat-n">36</span><div class="stat-l">· RARE (1–4 dohas)</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="card-t">⭐ MAJOR THEMES (≥100 DOHAS)</div><div id="tier-major"></div></div>
+    <div class="card"><div class="card-t">◎ MID THEMES (20–99 DOHAS)</div><div id="tier-mid" style="max-height:500px;overflow-y:auto;padding-right:4px;"></div></div>
+  </div>
+  <div class="g2" style="margin-top:2px;">
+    <div class="card"><div class="card-t">○ MINOR THEMES (5–19 DOHAS)</div><div id="tier-minor"></div></div>
+    <div class="card"><div class="card-t">· RARE THEMES (1–4 DOHAS) — 36 TOTAL</div><div id="tier-rare" style="display:flex;flex-wrap:wrap;gap:4px;padding:4px 0;"></div></div>
+  </div>
+</div>
+
+<!-- ══════════════════ INSIGHTS ══════════════════ -->
+<div class="panel" id="panel-insights">
+  <div class="sec">Data Insights & Findings</div>
+  <div class="g3" id="insights-grid"></div>
+
+  <div class="sec" style="margin-top:24px;">Author Concentration Analysis</div>
+  <div class="g2">
+    <div class="card"><div class="card-t">TOP 5 AUTHORS CONTROL WHAT % OF COLLECTION?</div><div id="conc-chart"></div></div>
+    <div class="card"><div class="card-t">THEME COVERAGE — HOW MANY AUTHORS WRITE EACH THEME?</div><div id="coverage-bars" style="max-height:420px;overflow-y:auto;padding-right:4px;"></div></div>
+  </div>
+
+  <div class="sec" style="margin-top:24px;">Explore: Theme → Authors</div>
+  <div class="card">
+    <div class="card-t">SELECT A THEME — SEE WHICH AUTHORS WRITE IT</div>
+    <select id="exp-theme-sel" style="background:var(--bg4);border:1px solid var(--border);color:var(--text);padding:8px 12px;font-size:0.82rem;outline:none;font-family:inherit;max-width:360px;margin-bottom:16px;display:block;width:100%;"></select>
+    <div id="exp-theme-chart"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════
+const THEMES=[["प्रेम",809],["सामाजिक",699],["भक्ति",641],["नीति",605],["विरह",352],["जीवन",339],["करुण",327],["शृंगार",325],["सौंदर्य",320],["राजनीति",309],["प्रकृति",216],["रीति",204],["ज्ञान",167],["ईश्वर",161],["वैराग्य",123],["धर्म",111],["दर्शन",111],["वीर",103],["गुरु",101],["उपदेश",100],["कर्म",99],["संत",99],["आध्यात्म",91],["काल",88],["साधना",80],["नायिका",73],["मोह",73],["कृष्ण",68],["मिलन",61],["स्वभाव",61],["भाग्य",56],["शिक्षा",56],["संयम",50],["मृत्यु",47],["सत्य",47],["मित्रता",44],["धैर्य",43],["माया",40],["दान",37],["त्याग",34],["रूप",34],["ऋतु",32],["विवेक",32],["न्याय",31],["वसंत",30],["समय",27],["मोक्ष",26],["संसार",26],["शत्रुता",23],["शांत",21],["अद्भुत",18],["वर्षा",18],["हास्य",16],["विवाह",15],["रति",12],["मान",12],["भय",10],["रात",8],["दिवस",8],["विश्वास",8],["पाखंड",7],["पूजा",7],["चंद्र",7],["योग",6],["मन",6],["ईर्ष्या",6],["आशा",5],["रौद्र",5],["दया",4],["स्मृति",4],["लाज",4],["संगत",3],["अहंकार",3],["मंत्र",3],["संतोष",2],["पतन",2],["शक्ति",2],["तीर्थ",2],["जन्म",2],["शाम",2],["स्वतंत्रता",2],["रूठना",2],["ब्रह्म",2],["अध्यात्म",1],["आनंद",1],["अज्ञान",1],["वीभत्स",1],["सर्जन",1],["ममता",1],["शोषण",1],["कवि",1],["तप",1],["उत्सव",1],["दुःख",1],["अन्य",1],["व्यापार",1],["कला",1],["यौवन",1],["काम",1],["उत्कंठा",1],["लज्जा",1],["भ्रम",1]];
+
+const AUTHORS=[["रसलीन",911],["दीनानाथ सुमित्र",798],["भारतेन्दु मिश्र",698],["रंजना वर्मा",643],["धरनीदास",510],["रामेश्वर काम्बोज 'हिमांशु'",378],["मुंशी रहमान खान",234],["कमलेश द्विवेदी",120],["बिहारी",110],["मनोज भावुक",104],["मतिराम",100],["रत्नावली देवी",100],["राधावल्लभ पाण्डेय",100],["रामसहायदास 'राम'",100],["रामेश्वर शुक्ल 'करुण'",100],["रसनिधि",99],["विक्रमादित्य सिंह विक्रम",99],["रामचरित उपाध्याय",97],["तुलसीराम शर्मा 'दिनेश'",90],["दीनानाथ अशंक",90],["हरिप्रसाद द्विवेदी",90],["अम्बिकाप्रसाद वर्मा 'दिव्य'",89],["किशोरचन्द्र कपूर 'किशोर'",89],["चन्द्रभान सिंह 'रज'",89],["दुलारे लाल भार्गव",89],["बालकृष्ण शर्मा 'नवीन'",87],["जानकी प्रसाद द्विवेदी",81],["रामेश्वर काम्बोज 'हिमांशु'",80],["सुरंगमा यादव",79],["गरिमा सक्सेना",70],["रसखान",53],["विनय मिश्र",50],["हनुमानप्रसाद पोद्दार",46],["रश्मि विभा त्रिपाठी",46],["रूपम झा",45],["चंद्रसिंह बिरकाली",33],["राजेन्द्र वर्मा",33],["सुजान-रसखान",26],["गुरुचरण सिंह",25],["शिवपूजन सहाय",22],["कबीर",18],["अमन चाँदपुरी",18],["अभिषेक कुमार अम्बर",11],["अश्विनी कुमार 'आँसू'",10],["महावीर प्रसाद 'मधुप'",10],["राहुल शिवाय",9],["घाघ",9],["अनिरूद्ध",7],["रहीम",7],["आराधना शुक्ला",7],["रामरक्षा मिश्र विमल",6],["स्मिता तिवारी बलिया",5],["रैदास",4],["दिनेश बाबा",3],["कविता भट्ट",1]];
+
+const AUTHOR_DATA=[{name:"रसलीन",count:911,diversity:48,productivity:19.0,signature:"सौंदर्य",top5:[["सौंदर्य",177],["शृंगार",169],["रीति",154],["विरह",88],["प्रेम",61]]},{name:"दीनानाथ सुमित्र",count:798,diversity:51,productivity:15.6,signature:"राजनीति",top5:[["राजनीति",157],["सामाजिक",135],["प्रेम",79],["जीवन",39],["नीति",36]]},{name:"भारतेन्दु मिश्र",count:698,diversity:61,productivity:11.4,signature:"सामाजिक",top5:[["सामाजिक",141],["करुण",96],["राजनीति",76],["जीवन",65],["प्रकृति",46]]},{name:"रंजना वर्मा",count:643,diversity:58,productivity:11.1,signature:"भक्ति",top5:[["भक्ति",71],["सामाजिक",64],["प्रेम",61],["प्रकृति",57],["करुण",42]]},{name:"धरनीदास",count:510,diversity:44,productivity:11.6,signature:"भक्ति",top5:[["भक्ति",133],["ज्ञान",34],["साधना",34],["वैराग्य",33],["नीति",32]]},{name:"रामेश्वर काम्बोज 'हिमांशु'",count:378,diversity:32,productivity:11.8,signature:"प्रेम",top5:[["प्रेम",150],["करुण",44],["सामाजिक",30],["जीवन",28],["विरह",27]]},{name:"मुंशी रहमान खान",count:234,diversity:27,productivity:8.7,signature:"नीति",top5:[["नीति",43],["धर्म",33],["भक्ति",29],["सामाजिक",18],["शिक्षा",14]]},{name:"कमलेश द्विवेदी",count:120,diversity:31,productivity:3.9,signature:"प्रेम",top5:[["प्रेम",38],["विरह",13],["जीवन",8],["विश्वास",8],["नीति",7]]},{name:"बिहारी",count:110,diversity:22,productivity:5.0,signature:"प्रेम",top5:[["प्रेम",20],["सौंदर्य",17],["विरह",14],["शृंगार",12],["नीति",7]]},{name:"मनोज भावुक",count:104,diversity:27,productivity:3.9,signature:"जीवन",top5:[["जीवन",18],["सामाजिक",15],["शृंगार",11],["विरह",9],["प्रेम",7]]},{name:"मतिराम",count:100,diversity:21,productivity:4.8,signature:"प्रेम",top5:[["प्रेम",17],["भक्ति",15],["शृंगार",12],["सौंदर्य",11],["विरह",10]]},{name:"रत्नावली देवी",count:100,diversity:23,productivity:4.3,signature:"नीति",top5:[["नीति",35],["भक्ति",10],["सामाजिक",10],["प्रेम",9],["विवाह",6]]},{name:"राधावल्लभ पाण्डेय",count:100,diversity:22,productivity:4.5,signature:"नीति",top5:[["नीति",26],["सामाजिक",25],["ईश्वर",10],["राजनीति",8],["दर्शन",5]]},{name:"रामसहायदास 'राम'",count:100,diversity:17,productivity:5.9,signature:"सौंदर्य",top5:[["सौंदर्य",20],["प्रेम",19],["शृंगार",17],["रूप",8],["भक्ति",7]]},{name:"रामेश्वर शुक्ल 'करुण'",count:100,diversity:21,productivity:4.8,signature:"सामाजिक",top5:[["सामाजिक",42],["करुण",13],["राजनीति",13],["जीवन",4],["शिक्षा",4]]},{name:"रसनिधि",count:99,diversity:18,productivity:5.5,signature:"प्रेम",top5:[["प्रेम",29],["सौंदर्य",14],["विरह",14],["भक्ति",11],["कृष्ण",7]]},{name:"विक्रमादित्य सिंह विक्रम",count:99,diversity:18,productivity:5.5,signature:"शृंगार",top5:[["शृंगार",19],["भक्ति",15],["प्रेम",13],["सौंदर्य",12],["रूप",6]]},{name:"रामचरित उपाध्याय",count:97,diversity:33,productivity:2.9,signature:"नीति",top5:[["नीति",24],["भक्ति",17],["प्रेम",10],["शृंगार",6],["विरह",4]]},{name:"तुलसीराम शर्मा 'दिनेश'",count:90,diversity:28,productivity:3.2,signature:"भक्ति",top5:[["भक्ति",26],["प्रेम",12],["सामाजिक",7],["ईश्वर",4],["आध्यात्म",3]]},{name:"दीनानाथ अशंक",count:90,diversity:26,productivity:3.5,signature:"नीति",top5:[["नीति",24],["प्रेम",11],["कर्म",6],["जीवन",6],["सामाजिक",6]]},{name:"हरिप्रसाद द्विवेदी",count:90,diversity:19,productivity:4.7,signature:"वीर",top5:[["वीर",48],["सामाजिक",11],["नीति",4],["त्याग",3],["धर्म",3]]},{name:"अम्बिकाप्रसाद वर्मा 'दिव्य'",count:89,diversity:20,productivity:4.5,signature:"विरह",top5:[["विरह",27],["प्रेम",19],["शृंगार",7],["मोह",6],["भक्ति",5]]},{name:"किशोरचन्द्र कपूर 'किशोर'",count:89,diversity:20,productivity:4.5,signature:"भक्ति",top5:[["भक्ति",21],["कृष्ण",10],["ईश्वर",10],["दर्शन",8],["कर्म",7]]},{name:"चन्द्रभान सिंह 'रज'",count:89,diversity:13,productivity:6.8,signature:"प्रेम",top5:[["प्रेम",26],["भक्ति",23],["शृंगार",13],["सौंदर्य",7],["ईश्वर",4]]},{name:"दुलारे लाल भार्गव",count:89,diversity:27,productivity:3.3,signature:"सामाजिक",top5:[["सामाजिक",12],["विरह",11],["प्रेम",7],["भक्ति",5],["करुण",5]]},{name:"बालकृष्ण शर्मा 'नवीन'",count:87,diversity:22,productivity:4.0,signature:"विरह",top5:[["विरह",13],["करुण",11],["जीवन",10],["प्रेम",9],["दर्शन",7]]},{name:"जानकी प्रसाद द्विवेदी",count:81,diversity:24,productivity:3.4,signature:"नीति",top5:[["नीति",21],["ज्ञान",10],["काल",7],["ईश्वर",6],["शृंगार",4]]},{name:"रामेश्वर काम्बोज 'हिमांशु'",count:80,diversity:17,productivity:4.7,signature:"प्रेम",top5:[["प्रेम",31],["सामाजिक",8],["राजनीति",8],["विरह",8],["जीवन",5]]},{name:"सुरंगमा यादव",count:79,diversity:22,productivity:3.6,signature:"सामाजिक",top5:[["सामाजिक",21],["करुण",8],["नीति",8],["विरह",6],["प्रकृति",5]]},{name:"गरिमा सक्सेना",count:70,diversity:10,productivity:7.0,signature:"सामाजिक",top5:[["सामाजिक",29],["करुण",13],["प्रेम",8],["न्याय",4],["शिक्षा",4]]},{name:"रसखान",count:53,diversity:5,productivity:10.6,signature:"प्रेम",top5:[["प्रेम",41],["भक्ति",9],["धर्म",1],["वैराग्य",1],["रीति",1]]},{name:"विनय मिश्र",count:50,diversity:21,productivity:2.4,signature:"जीवन",top5:[["जीवन",10],["सामाजिक",8],["नीति",4],["राजनीति",4],["कर्म",2]]},{name:"हनुमानप्रसाद पोद्दार",count:46,diversity:13,productivity:3.5,signature:"भक्ति",top5:[["भक्ति",14],["ईश्वर",14],["रूप",6],["मोक्ष",2],["प्रेम",2]]},{name:"रश्मि विभा त्रिपाठी",count:46,diversity:12,productivity:3.8,signature:"प्रेम",top5:[["प्रेम",30],["मिलन",4],["भक्ति",2],["विरह",2],["शृंगार",1]]},{name:"रूपम झा",count:45,diversity:18,productivity:2.5,signature:"सामाजिक",top5:[["सामाजिक",17],["शिक्षा",4],["जीवन",3],["राजनीति",3],["सत्य",2]]},{name:"चंद्रसिंह बिरकाली",count:33,diversity:9,productivity:3.7,signature:"प्रकृति",top5:[["प्रकृति",14],["विरह",6],["करुण",5],["वर्षा",3],["प्रेम",1]]},{name:"राजेन्द्र वर्मा",count:33,diversity:17,productivity:1.9,signature:"प्रकृति",top5:[["प्रकृति",14],["जीवन",2],["सामाजिक",2],["राजनीति",2],["आध्यात्म",1]]},{name:"सुजान-रसखान",count:26,diversity:7,productivity:3.7,signature:"प्रेम",top5:[["प्रेम",8],["सौंदर्य",7],["भक्ति",6],["शृंगार",2],["जीवन",1]]},{name:"गुरुचरण सिंह",count:25,diversity:8,productivity:3.1,signature:"सामाजिक",top5:[["सामाजिक",14],["राजनीति",3],["जीवन",3],["संसार",1],["धर्म",1]]},{name:"शिवपूजन सहाय",count:22,diversity:3,productivity:7.3,signature:"भक्ति",top5:[["भक्ति",14],["ईश्वर",6],["कृष्ण",2]]},{name:"कबीर",count:18,diversity:12,productivity:1.5,signature:"नीति",top5:[["नीति",3],["ज्ञान",2],["विवेक",2],["दर्शन",2],["भक्ति",2]]},{name:"अमन चाँदपुरी",count:18,diversity:11,productivity:1.6,signature:"जीवन",top5:[["जीवन",5],["ईश्वर",2],["रीति",2],["करुण",2],["प्रेम",1]]},{name:"अभिषेक कुमार अम्बर",count:11,diversity:4,productivity:2.8,signature:"सामाजिक",top5:[["सामाजिक",4],["भक्ति",3],["पूजा",2],["नीति",2]]},{name:"अश्विनी कुमार 'आँसू'",count:10,diversity:7,productivity:1.4,signature:"विरह",top5:[["विरह",4],["सामाजिक",1],["नीति",1],["समय",1],["मिलन",1]]},{name:"महावीर प्रसाद 'मधुप'",count:10,diversity:4,productivity:2.5,signature:"नीति",top5:[["नीति",5],["धैर्य",2],["ज्ञान",2],["वीर",1]]},{name:"राहुल शिवाय",count:9,diversity:6,productivity:1.5,signature:"वसंत",top5:[["वसंत",3],["रति",2],["प्रकृति",1],["विरह",1],["प्रेम",1]]},{name:"घाघ",count:9,diversity:1,productivity:9.0,signature:"प्रकृति",top5:[["प्रकृति",9]]},{name:"अनिरूद्ध",count:7,diversity:4,productivity:1.8,signature:"नीति",top5:[["नीति",2],["कर्म",2],["जीवन",2],["त्याग",1]]},{name:"रहीम",count:7,diversity:5,productivity:1.4,signature:"विरह",top5:[["विरह",2],["प्रेम",2],["सौंदर्य",1],["जीवन",1],["कृष्ण",1]]},{name:"आराधना शुक्ला",count:7,diversity:1,productivity:7.0,signature:"जीवन",top5:[["जीवन",7]]},{name:"रामरक्षा मिश्र विमल",count:6,diversity:4,productivity:1.5,signature:"नीति",top5:[["नीति",2],["सामाजिक",2],["शृंगार",1],["दर्शन",1]]},{name:"स्मिता तिवारी बलिया",count:5,diversity:4,productivity:1.2,signature:"नीति",top5:[["नीति",2],["करुण",1],["प्रेम",1],["उपदेश",1]]},{name:"रैदास",count:4,diversity:3,productivity:1.3,signature:"सामाजिक",top5:[["सामाजिक",2],["आध्यात्म",1],["भक्ति",1]]},{name:"दिनेश बाबा",count:3,diversity:1,productivity:3.0,signature:"हास्य",top5:[["हास्य",3]]},{name:"कविता भट्ट",count:1,diversity:1,productivity:1.0,signature:"वैराग्य",top5:[["वैराग्य",1]]}];
+
+const NET_NODES=[{id:"प्रेम",count:809},{id:"सामाजिक",count:699},{id:"भक्ति",count:641},{id:"नीति",count:605},{id:"विरह",count:352},{id:"जीवन",count:339},{id:"करुण",count:327},{id:"शृंगार",count:325},{id:"सौंदर्य",count:320},{id:"राजनीति",count:309},{id:"प्रकृति",count:216},{id:"रीति",count:204},{id:"ईश्वर",count:161},{id:"ज्ञान",count:167},{id:"धर्म",count:111}];
+const NET_LINKS=[{s:"प्रेम",t:"भक्ति",w:33},{s:"प्रेम",t:"नीति",w:33},{s:"सामाजिक",t:"नीति",w:31},{s:"प्रेम",t:"सामाजिक",w:29},{s:"भक्ति",t:"नीति",w:29},{s:"प्रेम",t:"विरह",w:27},{s:"प्रेम",t:"जीवन",w:27},{s:"प्रेम",t:"करुण",w:27},{s:"सामाजिक",t:"भक्ति",w:27},{s:"प्रेम",t:"सौंदर्य",w:25},{s:"नीति",t:"करुण",w:25},{s:"नीति",t:"जीवन",w:25},{s:"नीति",t:"प्रकृति",w:25},{s:"सामाजिक",t:"जीवन",w:25},{s:"सामाजिक",t:"करुण",w:24},{s:"प्रेम",t:"प्रकृति",w:25},{s:"भक्ति",t:"विरह",w:22},{s:"सामाजिक",t:"विरह",w:22},{s:"नीति",t:"ज्ञान",w:23},{s:"जीवन",t:"प्रकृति",w:20}];
+
+const KEYWORDS=[["प्यार",557],["प्रेम",261],["भगवान",231],["जीवन",201],["कृष्ण",186],["दुख",181],["गुरु",150],["करो",149],["भक्ति",141],["सच्चा",133],["ज्ञान",128],["विरह",108],["राम",102],["दर्द",98],["ईश्वर",97],["सुख",90],["धर्म",87],["जादू",86],["मोह",85],["प्रिय",84],["नाम",77],["नेता",74],["रूप",74],["माँ",73],["सुंदरता",71],["सौंदर्य",70],["साथ",67],["राधा",67],["बिना",66],["नायिका",65],["दिल",65],["कर्म",64],["खेल",59],["मिलन",58],["छोड़ो",58],["शक्ति",57],["प्रभु",57],["नारी",57],["समय",56],["बात",55],["सम्मान",54],["दुनिया",53],["लोग",52],["सबसे",51],["याद",50],["काम",49],["माया",49],["दूर",48],["संत",48],["मौत",48]];
+
+const THEME_KEYWORDS={"प्रेम":["प्यार","प्रेम","सच्चा","कृष्ण","दिल"],"सामाजिक":["नारी","समाज","लोग","दुख","सम्मान"],"भक्ति":["भक्ति","भगवान","कृष्ण","राम","नाम"],"नीति":["करो","बुरा","काम","दूर","ज्ञान"],"विरह":["विरह","प्रिय","दर्द","प्यार","दुख"],"शृंगार":["प्यार","प्रेम","जादू","सौंदर्य","कृष्ण"],"करुण":["दुख","दर्द","जीवन","माँ","गरीबी"],"सौंदर्य":["सुंदरता","सौंदर्य","सुंदर","रूप","जादू"],"राजनीति":["नेता","राजनीति","राज","जनता","सत्ता"],"जीवन":["जीवन","दुख","सुख","संघर्ष","जिंदगी"],"प्रकृति":["प्रकृति","बारिश","सुबह","पानी","मौसम"],"रीति":["भाव","नायिका","प्रकार","कवि","रस"],"ईश्वर":["भगवान","ईश्वर","राम","शिव","रूप"],"ज्ञान":["ज्ञान","गुरु","सच्चा","महत्व","जानो"],"धर्म":["धर्म","भगवान","कर्म","ज्ञान","भक्ति"]};
+
+const TIER_DATA={major:[["प्रेम",809],["सामाजिक",699],["भक्ति",641],["नीति",605],["विरह",352],["जीवन",339],["करुण",327],["शृंगार",325],["सौंदर्य",320],["राजनीति",309],["प्रकृति",216],["रीति",204],["ज्ञान",167],["ईश्वर",161],["वैराग्य",123],["धर्म",111],["दर्शन",111],["वीर",103],["गुरु",101],["उपदेश",100]],mid:[["कर्म",99],["संत",99],["आध्यात्म",91],["काल",88],["साधना",80],["नायिका",73],["मोह",73],["कृष्ण",68],["मिलन",61],["स्वभाव",61],["भाग्य",56],["शिक्षा",56],["संयम",50],["मृत्यु",47],["सत्य",47],["मित्रता",44],["धैर्य",43],["माया",40],["दान",37],["त्याग",34],["रूप",34],["ऋतु",32],["विवेक",32],["न्याय",31],["वसंत",30],["समय",27],["मोक्ष",26],["संसार",26],["शत्रुता",23],["शांत",21]],minor:[["अद्भुत",18],["वर्षा",18],["हास्य",16],["विवाह",15],["रति",12],["मान",12],["भय",10],["रात",8],["दिवस",8],["विश्वास",8],["पाखंड",7],["पूजा",7],["चंद्र",7],["योग",6],["मन",6],["ईर्ष्या",6],["आशा",5],["रौद्र",5]],rare:[["दया",4],["स्मृति",4],["लाज",4],["संगत",3],["अहंकार",3],["मंत्र",3],["संतोष",2],["पतन",2],["शक्ति",2],["तीर्थ",2],["जन्म",2],["शाम",2],["स्वतंत्रता",2],["रूठना",2],["ब्रह्म",2],["अध्यात्म",1],["आनंद",1],["अज्ञान",1],["वीभत्स",1],["सर्जन",1],["ममता",1],["शोषण",1],["कवि",1],["तप",1],["उत्सव",1],["दुःख",1],["अन्य",1],["व्यापार",1],["कला",1],["यौवन",1],["काम",1],["उत्कंठा",1],["लज्जा",1],["भ्रम",1]]};
+
+const CLRS=["#c9a84c","#e84393","#5b9cf6","#4ecb8d","#f0974a","#9d7df5","#3ecfcf","#e05c6a","#f5c842","#16a085","#e8c96a","#fd79a8","#74b9ff","#a29bfe","#55efc4","#fab1a0","#81ecec","#ffeaa7","#fd79a8","#6c5ce7","#00b894","#fdcb6e","#e17055","#b2bec3","#c9a84c","#e84393","#5b9cf6","#4ecb8d","#f0974a","#9d7df5","#3ecfcf","#e05c6a","#f5c842","#16a085","#e8c96a","#fd79a8","#74b9ff","#a29bfe","#55efc4","#fab1a0","#81ecec","#ffeaa7","#fd79a8","#6c5ce7","#00b894","#fdcb6e","#e17055","#b2bec3","#c9a84c","#e84393","#5b9cf6","#4ecb8d","#f0974a","#9d7df5","#3ecfcf","#e05c6a"];
+
+// ═══════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════
+const tip=document.getElementById('tip');
+function showTip(e,t,b){tip.innerHTML=`<strong>${t}</strong>${b}`;tip.style.display='block';moveTip(e);}
+function moveTip(e){let x=e.clientX+14,y=e.clientY-10;if(x+260>window.innerWidth)x=e.clientX-260;tip.style.left=x+'px';tip.style.top=y+'px';}
+document.addEventListener('mousemove',e=>{if(tip.style.display==='block')moveTip(e);});
+function hideTip(){tip.style.display='none';}
+
+function mkBars(el,data,maxV,lw=110,h=16,delay=150){
+  const max=maxV||data[0][1];const tot=THEMES.reduce((s,[,v])=>s+v,0);
+  data.forEach(([l,v],i)=>{
+    const p=(v/max*100).toFixed(1);const c=CLRS[i%CLRS.length];
+    const r=document.createElement('div');r.className='brow';
+    r.innerHTML=`<div class="bl" style="width:${lw}px">${l}</div><div class="bt"><div class="bf" style="width:0%;background:${c}" data-p="${p}"></div></div><div class="bv">${v}</div>`;
+    r.addEventListener('mouseenter',e=>showTip(e,l,`${v} dohas · ${((v/tot)*100).toFixed(1)}% of collection`));
+    r.addEventListener('mouseleave',hideTip);
+    el.appendChild(r);
+  });
+  setTimeout(()=>{el.querySelectorAll('.bf[data-p]').forEach(x=>x.style.width=x.dataset.p+'%');},delay);
+}
+
+function tab(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+//  OVERVIEW
+// ═══════════════════════════════════════════
+mkBars(document.getElementById('ov-theme-bars'),THEMES.slice(0,20),THEMES[0][1],100);
+mkBars(document.getElementById('ov-author-bars'),AUTHORS,AUTHORS[0][1],150,14);
+
+// Bubbles
+(()=>{
+  const c=document.getElementById('ov-bubbles');
+  const W=c.offsetWidth||680,H=380,tot=THEMES.reduce((s,[,v])=>s+v,0);
+  let x=0,y=0,rh=0,p=3;
+  THEMES.forEach(([t,v],i)=>{
+    const area=(v/tot)*W*H*1.1;const sz=Math.sqrt(area);
+    const w=Math.max(sz*1.3,38),h=Math.max(sz*0.72,20);
+    if(x+w>W&&x>0){y+=rh+p;x=0;rh=0;}
+    const el=document.createElement('div');const c2=CLRS[i%CLRS.length];
+    el.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${c2}18;border:1px solid ${c2}55;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:default;transition:background 0.18s;`;
+    el.innerHTML=`<div style="font-size:${Math.min(0.8,Math.max(0.52,w/130))}rem;color:${c2};text-align:center;padding:2px 3px;line-height:1.2">${t}</div><div style="font-family:'DM Mono',monospace;font-size:0.5rem;color:var(--muted)">${v}</div>`;
+    el.addEventListener('mouseenter',e=>{el.style.background=c2+'2e';showTip(e,t,`${v} dohas`);});
+    el.addEventListener('mouseleave',()=>{el.style.background=c2+'18';hideTip();});
+    c.appendChild(el);x+=w+p;rh=Math.max(rh,h);
+  });
+})();
+
+// Donut
+(()=>{
+  const cv=document.getElementById('donut-c'),ctx=cv.getContext('2d');
+  const tot=AUTHORS.reduce((s,[,v])=>s+v,0);
+  const cx=100,cy=100,r=88,in_=50;let a=-Math.PI/2;
+  AUTHORS.forEach(([n,v],i)=>{
+    const sl=(v/tot)*Math.PI*2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,a,a+sl);ctx.closePath();
+    ctx.fillStyle=CLRS[i%CLRS.length];ctx.fill();ctx.strokeStyle='#08070c';ctx.lineWidth=1.5;ctx.stroke();a+=sl;
+  });
+  ctx.beginPath();ctx.arc(cx,cy,in_,0,Math.PI*2);ctx.fillStyle='#08070c';ctx.fill();
+  ctx.fillStyle='#e8c96a';ctx.font='bold 18px DM Mono';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('56',cx,cy-7);
+  ctx.fillStyle='#6e648a';ctx.font='9px DM Mono';ctx.fillText('AUTHORS',cx,cx+5);
+  const leg=document.getElementById('donut-leg');
+  AUTHORS.forEach(([n,v],i)=>{
+    const p=((v/tot)*100).toFixed(1);const el=document.createElement('div');el.className='li';
+    const sh=n.length>14?n.slice(0,14)+'…':n;
+    el.innerHTML=`<div class="ld" style="background:${CLRS[i%CLRS.length]}"></div><div class="ln">${sh}</div><div class="lv">${p}%</div>`;
+    el.addEventListener('mouseenter',e=>showTip(e,n,`${v} dohas · ${p}%`));el.addEventListener('mouseleave',hideTip);
+    leg.appendChild(el);
+  });
+})();
+
+// Category grid
+(()=>{
+  const cats=[
+    {n:"प्रेम व शृंगार",c:CLRS[0],icon:"❤",themes:[["प्रेम",809],["विरह",352],["शृंगार",325],["सौंदर्य",320],["मिलन",61],["रीति",204]]},
+    {n:"भक्ति व अध्यात्म",c:CLRS[1],icon:"🪔",themes:[["भक्ति",641],["ईश्वर",161],["वैराग्य",123],["धर्म",111],["कृष्ण",68],["साधना",80]]},
+    {n:"नीति व समाज",c:CLRS[2],icon:"⚖",themes:[["सामाजिक",699],["नीति",605],["राजनीति",309],["उपदेश",100],["शिक्षा",56],["न्याय",31]]},
+    {n:"जीवन दर्शन",c:CLRS[3],icon:"☯",themes:[["जीवन",339],["करुण",327],["दर्शन",111],["कर्म",99],["काल",88],["मृत्यु",47]]},
+  ];
+  const g=document.getElementById('cat-grid');
+  cats.forEach(cat=>{
+    const tot=cat.themes.reduce((s,[,v])=>s+v,0);const mx=cat.themes[0][1];
+    const d=document.createElement('div');d.className='card';
+    d.style.borderTopColor=cat.c;d.style.borderTopWidth='2px';
+    let html=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><span style="font-size:1.1rem">${cat.icon}</span><div><div style="color:${cat.c};font-size:0.9rem">${cat.n}</div><div style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted)">${tot} dohas total</div></div></div>`;
+    cat.themes.forEach(([t,v])=>{
+      const p=(v/mx*100).toFixed(0);
+      html+=`<div style="display:flex;align-items:center;gap:7px;margin-bottom:7px"><span style="width:76px;font-size:0.75rem;flex-shrink:0">${t}</span><div style="flex:1;height:12px;background:var(--bg4)"><div style="width:${p}%;height:100%;background:${cat.c};opacity:0.75;transition:width 1s"></div></div><span style="font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--muted);min-width:28px">${v}</span></div>`;
+    });
+    d.innerHTML=html;g.appendChild(d);
+  });
+})();
+
+// ═══════════════════════════════════════════
+//  ALL THEMES TABLE
+// ═══════════════════════════════════════════
+let allThemeData=THEMES.map(([t,v],i)=>({t,v,rank:i+1,tier:v>=100?'M':v>=20?'m':v>=5?'n':'r'}));
+let filteredTD=[...allThemeData];let sortDir=1;let sortKey='rank';
+
+function renderTT(data){
+  const tb=document.getElementById('ttbody');tb.innerHTML='';
+  const tot=THEMES.reduce((s,[,v])=>s+v,0);const mx=THEMES[0][1];
+  data.forEach(({t,v,rank,tier})=>{
+    const p=(v/tot*100).toFixed(2);const bw=(v/mx*160).toFixed(0);
+    const tc=CLRS[(rank-1)%CLRS.length];
+    const tierLabel={'M':'Major','m':'Mid','n':'Minor','r':'Rare'}[tier];
+    const tierClass={'M':'tier-M','m':'tier-m','n':'tier-n','r':'tier-r'}[tier];
+    const tr=document.createElement('tr');
+    tr.style.borderBottom='1px solid var(--border)';tr.style.transition='background 0.12s';
+    tr.innerHTML=`<td style="padding:8px 12px;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted)">#${rank}</td><td style="padding:8px 12px;font-size:0.88rem">${t}<span class="tier ${tierClass}">${tierLabel}</span></td><td style="padding:8px 12px;font-family:'DM Mono',monospace;font-size:0.72rem;text-align:right;color:var(--muted)">${v} <small style="opacity:0.5">(${p}%)</small></td><td style="padding:8px 12px"><div style="height:12px;width:${bw}px;background:${tc};max-width:160px;transition:width 0.8s;"></div></td>`;
+    tr.addEventListener('mouseenter',e=>{tr.style.background='var(--bg4)';showTip(e,t,`Rank #${rank} · ${v} dohas · ${p}% of collection`);});
+    tr.addEventListener('mouseleave',()=>{tr.style.background='';hideTip();});
+    tb.appendChild(tr);
+  });
+}
+renderTT(allThemeData);
+mkBars(document.getElementById('all-theme-bars'),THEMES,THEMES[0][1],110,14);
+
+function filterTier(tier,btn){
+  document.querySelectorAll('#tier-filters .fb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  filteredTD=tier==='all'?[...allThemeData]:allThemeData.filter(d=>d.tier===tier[0]);
+  renderTT(filteredTD);
+}
+function searchT(q){
+  const sq=q.trim();if(!sq){renderTT(filteredTD);return;}
+  renderTT(filteredTD.filter(d=>d.t.includes(sq)||d.t.toLowerCase().includes(sq.toLowerCase())));
+}
+function sortTable(k){
+  sortKey=k;sortDir=-sortDir;
+  filteredTD.sort((a,b)=>k==='name'?a.t.localeCompare(b.t)*sortDir:(a[k==='rank'?'rank':'v']-b[k==='rank'?'rank':'v'])*sortDir);
+  renderTT(filteredTD);
+}
+
+// Tier rings
+(()=>{
+  const cont=document.getElementById('tier-rings');
+  const tiers=[{label:'Major',count:20,dohas:TIER_DATA.major.reduce((s,[,v])=>s+v,0),c:'var(--gold)'},{label:'Mid',count:30,dohas:TIER_DATA.mid.reduce((s,[,v])=>s+v,0),c:'var(--blue)'},{label:'Minor',count:18,dohas:TIER_DATA.minor.reduce((s,[,v])=>s+v,0),c:'var(--green)'},{label:'Rare',count:36,dohas:TIER_DATA.rare.reduce((s,[,v])=>s+v,0),c:'var(--muted)'}];
+  const totD=tiers.reduce((s,t)=>s+t.dohas,0);
+  tiers.forEach(tier=>{
+    const pct=(tier.dohas/totD*100).toFixed(1);
+    const w=document.createElement('div');w.className='ring-wrap';
+    const cv=document.createElement('canvas');cv.width=90;cv.height=90;
+    const ctx=cv.getContext('2d');
+    ctx.beginPath();ctx.arc(45,45,38,0,Math.PI*2);ctx.strokeStyle='var(--bg4)';ctx.lineWidth=8;ctx.stroke();
+    ctx.beginPath();ctx.arc(45,45,38,-Math.PI/2,-Math.PI/2+(pct/100)*Math.PI*2);ctx.strokeStyle=tier.c.replace('var(','').replace(')','');
+    const colorMap={'--gold':'#c9a84c','--blue':'#5b9cf6','--green':'#4ecb8d','--muted':'#6e648a'};
+    ctx.strokeStyle=colorMap[tier.c.replace('var(','').replace(')','')]||'#c9a84c';
+    ctx.lineWidth=8;ctx.lineCap='round';ctx.stroke();
+    ctx.fillStyle='#e8c96a';ctx.font='bold 14px DM Mono';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(pct+'%',45,45);
+    w.appendChild(cv);
+    const lbl=document.createElement('div');lbl.className='ring-label';lbl.innerHTML=`<span class="ring-val">${tier.count}</span> ${tier.label}`;
+    w.appendChild(lbl);
+    const sub=document.createElement('div');sub.style.cssText='font-size:0.6rem;color:var(--muted);font-family:"DM Mono",monospace;text-align:center;';sub.textContent=tier.dohas+' dohas';
+    w.appendChild(sub);cont.appendChild(w);
+  });
+})();
+
+// ═══════════════════════════════════════════
+//  AUTHORS
+// ═══════════════════════════════════════════
+let authorCards=[];
+(()=>{
+  const g=document.getElementById('acards');
+  AUTHOR_DATA.forEach((a,i)=>{
+    const c=CLRS[i%CLRS.length];
+    const el=document.createElement('div');el.className='acard';
+    el.style.setProperty('--cc',c);el.style.borderTopColor=c;
+    const chips=a.top5.map(([t,v])=>`<span class="chip" style="color:${c};border-color:${c}44">${t}(${v})</span>`).join('');
+    const cat=a.count>=100?'major':a.count>=50?'mid':'minor';
+    el.innerHTML=`<div class="aname">${a.name}</div><div class="acount">${a.count} dohas · ${a.diversity} themes · ✦ ${a.signature}</div><div class="chips">${chips}</div>`;
+    el.dataset.cat=cat;el.dataset.name=a.name.toLowerCase();
+    g.appendChild(el);authorCards.push(el);
+  });
+})();
+
+function filterA(cat,btn){document.querySelectorAll('#size-filters .fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');authorCards.forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'block':'none';});}
+function searchA(q){const sq=q.trim().toLowerCase();authorCards.forEach(c=>{c.style.display=(!sq||c.dataset.name.includes(sq))?'block':'none';});}
+
+// Productivity + Diversity bars
+mkBars(document.getElementById('prod-bars'),AUTHOR_DATA.map(a=>[a.name,a.productivity]).sort((a,b)=>b[1]-a[1]).map(([n,v])=>[n.length>18?n.slice(0,18)+'…':n,v]),null,160,15,200);
+mkBars(document.getElementById('div-bars'),AUTHOR_DATA.map(a=>[a.name,a.diversity]).sort((a,b)=>b[1]-a[1]).map(([n,v])=>[n.length>18?n.slice(0,18)+'…':n,v]),null,160,15,200);
+
+// Signature theme chips
+(()=>{
+  const g=document.getElementById('sig-grid');
+  const sigColors={'प्रेम':CLRS[0],'भक्ति':CLRS[1],'नीति':CLRS[2],'सामाजिक':CLRS[3],'सौंदर्य':CLRS[4],'राजनीति':CLRS[5],'विरह':CLRS[6],'शृंगार':CLRS[7],'जीवन':CLRS[8],'वीर':CLRS[9],'प्रकृति':CLRS[10],'हास्य':CLRS[11],'वसंत':CLRS[12],'वैराग्य':CLRS[13]};
+  AUTHOR_DATA.forEach((a,i)=>{
+    const c=sigColors[a.signature]||CLRS[i%CLRS.length];
+    const el=document.createElement('div');
+    el.style.cssText=`padding:6px 10px;background:${c}15;border:1px solid ${c}44;cursor:default;display:flex;flex-direction:column;gap:2px;min-width:120px;`;
+    el.innerHTML=`<div style="font-size:0.7rem;color:${c};font-family:'DM Mono',monospace">${a.signature}</div><div style="font-size:0.65rem;color:var(--muted)">${a.name.length>16?a.name.slice(0,16)+'…':a.name}</div>`;
+    el.addEventListener('mouseenter',e=>showTip(e,a.name,`Signature: ${a.signature} · ${a.count} dohas`));
+    el.addEventListener('mouseleave',hideTip);g.appendChild(el);
+  });
+})();
+
+// ═══════════════════════════════════════════
+//  HEATMAP
+// ═══════════════════════════════════════════
+const HM_T=THEMES.slice(0,15).map(([t])=>t);
+const authorLookup={};
+AUTHOR_DATA.forEach(a=>{authorLookup[a.name]={};a.top5.forEach(([t,v])=>authorLookup[a.name][t]=v);});
+
+(()=>{
+  const tbl=document.getElementById('hmtable');
+  const maxV=Math.max(...AUTHOR_DATA.flatMap(a=>HM_T.map(t=>authorLookup[a.name]?.[t]||0)));
+  const thead=document.createElement('thead');
+  let hr='<tr><th style="width:160px;text-align:right;padding-right:8px">Author</th>';
+  HM_T.forEach(t=>hr+=`<th>${t}</th>`);hr+='</tr>';thead.innerHTML=hr;tbl.appendChild(thead);
+  const tbody=document.createElement('tbody');
+  AUTHOR_DATA.forEach(a=>{
+    const tr=document.createElement('tr');
+    let cells=`<td class="rl">${a.name.length>16?a.name.slice(0,16)+'…':a.name}</td>`;
+    HM_T.forEach(theme=>{
+      const v=authorLookup[a.name]?.[theme]||0;
+      const tx=v?Math.pow(v/maxV,0.55):0;
+      const r=Math.round(8+tx*196),gg=Math.round(7+tx*50),b=Math.round(12+tx*35);
+      const tc=tx>0.5?'#f0e6ff':'#6e648a';
+      cells+=`<td style="background:rgb(${r},${gg},${b});color:${tc}" data-a="${a.name}" data-t="${theme}" data-v="${v}">${v||''}</td>`;
+    });
+    tr.innerHTML=cells;tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody);
+  tbl.querySelectorAll('td[data-v]').forEach(td=>{
+    td.addEventListener('mouseenter',e=>showTip(e,`${td.dataset.a}`,`${td.dataset.t}: ${td.dataset.v} dohas`));
+    td.addEventListener('mouseleave',hideTip);
+  });
+})();
+
+// Author selector
+(()=>{
+  const row=document.getElementById('author-sel-row');
+  AUTHOR_DATA.slice(0,24).forEach((a,i)=>{
+    const btn=document.createElement('button');btn.className='fb';
+    btn.textContent=a.name.length>12?a.name.slice(0,12)+'…':a.name;btn.title=a.name;
+    btn.onclick=()=>{
+      document.querySelectorAll('#author-sel-row .fb').forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');showAuthorDetail(a);
+    };row.appendChild(btn);
+  });
+})();
+function showAuthorDetail(a){
+  const d=document.getElementById('author-detail');d.innerHTML=`<div class="card-t">${a.name} — Theme Breakdown (${a.count} total dohas)</div>`;
+  mkBars(d,a.top5,a.top5[0][1],120,18,50);
+}
+
+// ═══════════════════════════════════════════
+//  NETWORK
+// ═══════════════════════════════════════════
+(()=>{
+  const svg=document.getElementById('network-svg');
+  const W=900,H=520;
+  // Force-like layout using fixed positions in circle
+  const n=NET_NODES.length;
+  const cx=W/2,cy=H/2,R=200;
+  const positions={};
+  // Place high-count nodes toward center
+  const sorted=[...NET_NODES].sort((a,b)=>b.count-a.count);
+  sorted.forEach((node,i)=>{
+    const angle=(i/n)*Math.PI*2-Math.PI/2;
+    const r=i<4?80:i<8?150:R;
+    positions[node.id]={x:cx+r*Math.cos(angle),y:cy+r*Math.sin(angle)};
+  });
+
+  const maxW=Math.max(...NET_LINKS.map(l=>l.w));
+  // Draw links
+  NET_LINKS.forEach(l=>{
+    const s=positions[l.s],t=positions[l.t];if(!s||!t)return;
+    const lw=((l.w/maxW)*5+0.5).toFixed(1);
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',s.x);line.setAttribute('y1',s.y);line.setAttribute('x2',t.x);line.setAttribute('y2',t.y);
+    line.setAttribute('stroke','#c9a84c');line.setAttribute('stroke-width',lw);line.setAttribute('stroke-opacity','0.35');
+    line.style.cursor='default';
+    line.addEventListener('mouseenter',e=>showTip(e,`${l.s} ↔ ${l.t}`,`${l.w} authors write both themes`));
+    line.addEventListener('mouseleave',hideTip);
+    svg.insertBefore(line,svg.firstChild);
+  });
+
+  // Draw nodes
+  NET_NODES.forEach((node,i)=>{
+    const pos=positions[node.id];if(!pos)return;
+    const r=Math.max(22,Math.min(42,Math.sqrt(node.count/8)));
+    const c=CLRS[i%CLRS.length];
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.style.cursor='default';
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx',pos.x);circle.setAttribute('cy',pos.y);circle.setAttribute('r',r);
+    circle.setAttribute('fill',c+'22');circle.setAttribute('stroke',c);circle.setAttribute('stroke-width','1.5');
+    const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+    text.setAttribute('x',pos.x);text.setAttribute('y',pos.y);text.setAttribute('text-anchor','middle');text.setAttribute('dominant-baseline','middle');
+    text.setAttribute('fill',c);text.setAttribute('font-size','10');text.textContent=node.id.length>4?node.id.slice(0,4):node.id;
+    const cnt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    cnt.setAttribute('x',pos.x);cnt.setAttribute('y',pos.y+14);cnt.setAttribute('text-anchor','middle');cnt.setAttribute('fill','#6e648a');cnt.setAttribute('font-size','8');cnt.textContent=node.count;
+    g.appendChild(circle);g.appendChild(text);g.appendChild(cnt);
+    g.addEventListener('mouseenter',e=>{circle.setAttribute('fill',c+'44');showTip(e,node.id,`${node.count} dohas · Connected to ${NET_LINKS.filter(l=>l.s===node.id||l.t===node.id).length} other themes`);});
+    g.addEventListener('mouseleave',()=>{circle.setAttribute('fill',c+'22');hideTip();});
+    svg.appendChild(g);
+  });
+})();
+
+// Pairs table
+(()=>{
+  const pairs=[["प्रेम","भक्ति",33],["प्रेम","नीति",33],["सामाजिक","नीति",31],["प्रेम","सामाजिक",29],["भक्ति","नीति",29],["प्रेम","विरह",27],["प्रेम","जीवन",27],["प्रेम","करुण",27],["सामाजिक","भक्ति",27],["प्रेम","सौंदर्य",25]];
+  const d=document.getElementById('pairs-table');
+  pairs.forEach(([t1,t2,w],i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);cursor:default;';
+    const c=CLRS[i%CLRS.length];
+    row.innerHTML=`<div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);min-width:20px">#${i+1}</div><div style="flex:1;font-size:0.85rem;color:${c}">${t1} <span style="color:var(--muted)">↔</span> ${t2}</div><div style="height:12px;width:${(w/33*160).toFixed(0)}px;background:${c};max-width:160px;"></div><div style="font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted);min-width:80px">${w} shared authors</div>`;
+    row.addEventListener('mouseenter',e=>showTip(e,`${t1} + ${t2}`,`${w} authors write both themes`));
+    row.addEventListener('mouseleave',hideTip);d.appendChild(row);
+  });
+})();
+
+// ═══════════════════════════════════════════
+//  SCATTER
+// ═══════════════════════════════════════════
+(()=>{
+  const svg=document.getElementById('scatter-svg');
+  const pad={l:60,r:20,t:20,b:50};const W=520,H=380;
+  const iW=W-pad.l-pad.r,iH=H-pad.t-pad.b;
+  const maxProd=Math.max(...AUTHOR_DATA.map(a=>a.productivity));
+  const maxDiv=Math.max(...AUTHOR_DATA.map(a=>a.diversity));
+  const maxCount=Math.max(...AUTHOR_DATA.map(a=>a.count));
+
+  // Grid lines
+  [0,5,10,15,20].forEach(v=>{
+    const x=pad.l+(v/maxProd)*iW;
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',x);line.setAttribute('y1',pad.t);line.setAttribute('x2',x);line.setAttribute('y2',pad.t+iH);
+    line.setAttribute('stroke','#252235');line.setAttribute('stroke-width','1');svg.appendChild(line);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',x);t.setAttribute('y',H-pad.b+16);t.setAttribute('text-anchor','middle');t.textContent=v;svg.appendChild(t);
+  });
+  [0,15,30,45,60].forEach(v=>{
+    const y=pad.t+iH-(v/maxDiv)*iH;
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1',pad.l);line.setAttribute('y1',y);line.setAttribute('x2',pad.l+iW);line.setAttribute('y2',y);
+    line.setAttribute('stroke','#252235');line.setAttribute('stroke-width','1');svg.appendChild(line);
+    const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x',pad.l-6);t.setAttribute('y',y+3);t.setAttribute('text-anchor','end');t.textContent=v;svg.appendChild(t);
+  });
+
+  // Axis labels
+  const xl=document.createElementNS('http://www.w3.org/2000/svg','text');
+  xl.setAttribute('x',W/2);xl.setAttribute('y',H-4);xl.setAttribute('text-anchor','middle');xl.setAttribute('fill','#6e648a');xl.setAttribute('font-size','10');xl.textContent='Productivity (dohas/theme)';svg.appendChild(xl);
+
+  AUTHOR_DATA.forEach((a,i)=>{
+    const x=pad.l+(a.productivity/maxProd)*iW;
+    const y=pad.t+iH-(a.diversity/maxDiv)*iH;
+    const r=Math.max(4,Math.min(20,Math.sqrt(a.count/8)));
+    const c=CLRS[i%CLRS.length];
+    const circle=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx',x);circle.setAttribute('cy',y);circle.setAttribute('r',r);
+    circle.setAttribute('fill',c+'66');circle.setAttribute('stroke',c);circle.setAttribute('stroke-width','1');
+    circle.style.cursor='default';circle.style.transition='r 0.15s';
+    circle.addEventListener('mouseenter',e=>{circle.setAttribute('fill',c+'aa');showTip(e,a.name,`Productivity: ${a.productivity} dohas/theme<br>Diversity: ${a.diversity} themes<br>Total: ${a.count} dohas<br>Signature: ${a.signature}`);});
+    circle.addEventListener('mouseleave',()=>{circle.setAttribute('fill',c+'66');hideTip();});
+    svg.appendChild(circle);
+    if(a.count>200){
+      const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',x+r+2);t.setAttribute('y',y+3);t.setAttribute('fill',c);t.setAttribute('font-size','8');t.textContent=a.name.slice(0,6);
+      svg.appendChild(t);
+    }
+  });
+})();
+
+// Radar chart
+(()=>{
+  const sel=document.getElementById('radar-sel');
+  AUTHOR_DATA.forEach(a=>{const o=document.createElement('option');o.value=a.name;o.textContent=a.name;sel.appendChild(o);});
+  sel.addEventListener('change',()=>{
+    if(!sel.value)return;
+    const a=AUTHOR_DATA.find(x=>x.name===sel.value);
+    drawRadar(a);
+  });
+})();
+function drawRadar(a){
+  const cv=document.getElementById('radar-canvas');const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,320,280);
+  const labels=a.top5.map(([t])=>t);const values=a.top5.map(([,v])=>v);const max=values[0];
+  const n=labels.length;const cx=160,cy=140,r=110;
+  // Background
+  ctx.fillStyle='#100e18';ctx.fillRect(0,0,320,280);
+  // Grid
+  [0.2,0.4,0.6,0.8,1.0].forEach(scale=>{
+    ctx.beginPath();
+    labels.forEach((_,i)=>{const a2=(i/n)*Math.PI*2-Math.PI/2;ctx.lineTo(cx+r*scale*Math.cos(a2),cy+r*scale*Math.sin(a2));});
+    ctx.closePath();ctx.strokeStyle='#252235';ctx.lineWidth=1;ctx.stroke();
+  });
+  // Spokes
+  labels.forEach((_,i)=>{const a2=(i/n)*Math.PI*2-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+r*Math.cos(a2),cy+r*Math.sin(a2));ctx.strokeStyle='#252235';ctx.lineWidth=1;ctx.stroke();});
+  // Data
+  ctx.beginPath();
+  values.forEach((v,i)=>{const a2=(i/n)*Math.PI*2-Math.PI/2;const rr=r*(v/max);ctx.lineTo(cx+rr*Math.cos(a2),cy+rr*Math.sin(a2));});
+  ctx.closePath();ctx.fillStyle='#c9a84c33';ctx.fill();ctx.strokeStyle='#c9a84c';ctx.lineWidth=2;ctx.stroke();
+  // Labels
+  labels.forEach((l,i)=>{const a2=(i/n)*Math.PI*2-Math.PI/2;const lx=cx+(r+18)*Math.cos(a2),ly=cy+(r+18)*Math.sin(a2);ctx.fillStyle='#e8c96a';ctx.font='10px Tiro Devanagari Hindi';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(l,lx,ly);});
+  // Center
+  ctx.fillStyle='#c9a84c';ctx.font='bold 11px DM Mono';ctx.textAlign='center';ctx.fillText(a.name.slice(0,10),cx,cy);
+}
+
+// Metrics table
+(()=>{
+  const tbl=document.getElementById('metrics-table');
+  tbl.innerHTML=`<thead style="background:var(--bg4);"><tr><th style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);text-align:left;cursor:pointer" onclick="sortMetrics('name')">AUTHOR</th><th style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);text-align:right;cursor:pointer" onclick="sortMetrics('count')">DOHAS</th><th style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);text-align:right;cursor:pointer" onclick="sortMetrics('diversity')">THEMES</th><th style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted);text-align:right;cursor:pointer" onclick="sortMetrics('productivity')">PROD.</th><th style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted)">SIGNATURE</th></tr></thead><tbody id="mtbody"></tbody>`;
+  renderMetrics([...AUTHOR_DATA]);
+})();
+let mDir=1;
+function sortMetrics(k){mDir=-mDir;const data=[...AUTHOR_DATA].sort((a,b)=>k==='name'?a.name.localeCompare(b.name)*mDir:(a[k]-b[k])*mDir);renderMetrics(data);}
+function renderMetrics(data){
+  const tb=document.getElementById('mtbody');tb.innerHTML='';
+  data.forEach((a,i)=>{
+    const c=CLRS[i%CLRS.length];const tr=document.createElement('tr');
+    tr.style.borderBottom='1px solid var(--border)';tr.style.transition='background 0.12s';
+    tr.innerHTML=`<td style="padding:8px 12px;font-size:0.82rem;color:${c}">${a.name}</td><td style="padding:8px 12px;font-family:'DM Mono',monospace;font-size:0.75rem;text-align:right">${a.count}</td><td style="padding:8px 12px;font-family:'DM Mono',monospace;font-size:0.75rem;text-align:right">${a.diversity}</td><td style="padding:8px 12px;font-family:'DM Mono',monospace;font-size:0.75rem;text-align:right;color:var(--muted)">${a.productivity}</td><td style="padding:8px 12px;font-size:0.78rem;color:${c}">${a.signature}</td>`;
+    tr.addEventListener('mouseenter',()=>tr.style.background='var(--bg4)');tr.addEventListener('mouseleave',()=>tr.style.background='');
+    tb.appendChild(tr);
+  });
+}
+
+// ═══════════════════════════════════════════
+//  KEYWORDS
+// ═══════════════════════════════════════════
+mkBars(document.getElementById('kw-bars'),KEYWORDS,KEYWORDS[0][1],100,15);
+
+// Word cloud
+(()=>{
+  const c=document.getElementById('wcloud');
+  const mx=KEYWORDS[0][1];
+  KEYWORDS.slice(0,35).forEach(([w,v],i)=>{
+    const el=document.createElement('div');
+    const sz=Math.max(0.7,Math.min(2.2,(v/mx)*2.5+0.4));
+    const c2=CLRS[i%CLRS.length];
+    el.style.cssText=`position:absolute;font-size:${sz}rem;color:${c2};cursor:default;user-select:none;transition:opacity 0.2s;padding:3px;`;
+    el.textContent=w;
+    const maxX=Math.max(10,c.offsetWidth-80);
+    const maxY=Math.max(10,260-sz*20);
+    el.style.left=(Math.random()*maxX)+'px';
+    el.style.top=(Math.random()*maxY)+'px';
+    el.addEventListener('mouseenter',e=>showTip(e,w,`${v} occurrences in core messages`));
+    el.addEventListener('mouseleave',hideTip);
+    c.appendChild(el);
+  });
+})();
+
+// Theme keyword selector
+(()=>{
+  const sel=document.getElementById('theme-kw-sel');
+  Object.keys(THEME_KEYWORDS).forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
+  sel.addEventListener('change',()=>{
+    const theme=sel.value;const chart=document.getElementById('theme-kw-chart');chart.innerHTML='';
+    if(!theme)return;
+    const kws=THEME_KEYWORDS[theme]||[];
+    kws.forEach((kw,i)=>{
+      const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:10px;';
+      const c=CLRS[i%CLRS.length];
+      row.innerHTML=`<div style="width:90px;font-size:0.85rem;color:${c}">${kw}</div><div style="flex:1;height:20px;background:var(--bg4)"><div style="width:${(100-(i*15))}%;height:100%;background:${c};opacity:0.75;transition:width 0.8s;"></div></div><div style="font-size:0.65rem;color:var(--muted);font-family:'DM Mono',monospace">Rank ${i+1}</div>`;
+      chart.appendChild(row);
+    });
+  });
+})();
+
+// ═══════════════════════════════════════════
+//  TIER SECTIONS
+// ═══════════════════════════════════════════
+mkBars(document.getElementById('tier-major'),TIER_DATA.major,TIER_DATA.major[0][1],90,16);
+mkBars(document.getElementById('tier-mid'),TIER_DATA.mid,TIER_DATA.mid[0][1],90,14,300);
+mkBars(document.getElementById('tier-minor'),TIER_DATA.minor,TIER_DATA.minor[0][1],90,14,300);
+(()=>{
+  const c=document.getElementById('tier-rare');
+  TIER_DATA.rare.forEach(([t,v],i)=>{
+    const el=document.createElement('div');const c2=CLRS[i%CLRS.length];
+    el.style.cssText=`padding:4px 9px;background:${c2}11;border:1px solid ${c2}33;font-size:0.72rem;cursor:default;`;
+    el.innerHTML=`<span style="color:${c2}">${t}</span> <span style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--muted)">(${v})</span>`;
+    el.addEventListener('mouseenter',e=>showTip(e,t,`${v} doha${v>1?'s':''} — Rare theme`));el.addEventListener('mouseleave',hideTip);
+    c.appendChild(el);
+  });
+})();
+
+// ═══════════════════════════════════════════
+//  INSIGHTS
+// ═══════════════════════════════════════════
+(()=>{
+  const ins=[
+    {icon:'👑',title:'Most Prolific Author',body:'रसलीन leads with 911 dohas across 48 themes — averaging 19 dohas per theme, showing both volume and focus.',c:'var(--gold)'},
+    {icon:'🎭',title:'Widest Theme Range',body:'भारतेन्दु मिश्र covers 61 unique themes — the broadest thematic reach of any author in the collection.',c:'var(--blue)'},
+    {icon:'❤',title:'Most Celebrated Theme',body:'प्रेम (Love) dominates with 809 dohas, written by 33+ authors — the single most universally explored subject.',c:'var(--pink)'},
+    {icon:'🔥',title:'Love–Devotion Connection',body:'प्रेम and भक्ति share 33 authors — the strongest theme pair, showing poetry\'s fusion of love and spirituality.',c:'var(--orange)'},
+    {icon:'🎯',title:'Most Focused Author',body:'रसखान writes 41 of his 53 dohas on प्रेम (77% concentration) — extreme thematic specialization.',c:'var(--purple)'},
+    {icon:'✦',title:'Rare Themes',body:'36 themes appear in just 1–4 dohas each — including भ्रम, लज्जा, व्यापार, and काम, showing poetry\'s true range.',c:'var(--muted)'},
+    {icon:'⚖',title:'Social Commentary',body:'सामाजिक (699) and राजनीति (309) together account for 1008 dohas — modern authors bring political voice to doha form.',c:'var(--teal)'},
+    {icon:'🌿',title:'Nature\'s Poets',body:'चंद्रसिंह बिरकाली, राजेन्द्र वर्मा, and घाघ are nature specialists — घाघ writes exclusively about प्रकृति.',c:'var(--green)'},
+    {icon:'⚡',title:'Top 6 Authors Dominate',body:'Just 6 authors (रसलीन, दीनानाथ, भारतेन्दु, रंजना, धरनीदास, हिमांशु) account for 57% of all 7889 dohas.',c:'var(--red)'},
+  ];
+  const g=document.getElementById('insights-grid');
+  ins.forEach(({icon,title,body,c})=>{
+    const el=document.createElement('div');el.className='card';
+    el.style.borderTopColor=c;el.style.borderTopWidth='2px';
+    el.innerHTML=`<div style="font-size:1.4rem;margin-bottom:10px">${icon}</div><div style="font-size:0.88rem;color:${c};margin-bottom:8px;line-height:1.4">${title}</div><div style="font-size:0.78rem;color:var(--muted);line-height:1.6">${body}</div>`;
+    g.appendChild(el);
+  });
+})();
+
+// Concentration
+(()=>{
+  const tot=AUTHORS.reduce((s,[,v])=>s+v,0);
+  let cum=0;const top6=AUTHORS.slice(0,6);
+  const d=document.getElementById('conc-chart');
+  top6.forEach(([n,v],i)=>{
+    cum+=v;const p=(v/tot*100).toFixed(1);const cp=(cum/tot*100).toFixed(1);
+    const c=CLRS[i%CLRS.length];
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:default;';
+    row.innerHTML=`<div style="width:150px;font-size:0.8rem;color:${c}">${n.length>16?n.slice(0,16)+'…':n}</div><div style="flex:1;height:20px;background:var(--bg4);position:relative"><div style="width:${p/15*100}%;max-width:100%;height:100%;background:${c};opacity:0.8;"></div></div><div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);min-width:60px">${v} (${p}%)</div>`;
+    row.addEventListener('mouseenter',e=>showTip(e,n,`${v} dohas · ${p}% individual · ${cp}% cumulative`));row.addEventListener('mouseleave',hideTip);
+    d.appendChild(row);
+  });
+  const note=document.createElement('div');note.style.cssText='font-family:"DM Mono",monospace;font-size:0.68rem;color:var(--muted);margin-top:14px;padding:10px;background:var(--bg4);border-left:3px solid var(--gold);';
+  note.textContent=`Top 6 authors = ${(top6.reduce((s,[,v])=>s+v,0)/tot*100).toFixed(1)}% of all dohas`;
+  d.appendChild(note);
+})();
+
+// Theme coverage bars
+(()=>{
+  const themeAuthors={};
+  AUTHOR_DATA.forEach(a=>{a.top5.forEach(([t])=>{themeAuthors[t]=(themeAuthors[t]||new Set()).add(a.name);});});
+  const sorted=Object.entries(themeAuthors).map(([t,s])=>[t,s.size]).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  mkBars(document.getElementById('coverage-bars'),sorted,sorted[0][1],100,14,200);
+})();
+
+// Explore theme selector
+(()=>{
+  const sel=document.getElementById('exp-theme-sel');
+  THEMES.forEach(([t])=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
+  sel.addEventListener('change',()=>{
+    const theme=sel.value;const c=document.getElementById('exp-theme-chart');c.innerHTML='';
+    if(!theme)return;
+    const data=AUTHOR_DATA.filter(a=>a.top5.some(([t])=>t===theme)).map(a=>{const found=a.top5.find(([t])=>t===theme);return[a.name,found?found[1]:0];}).sort((a,b)=>b[1]-a[1]);
+    if(!data.length){c.innerHTML='<div style="color:var(--muted);font-size:0.8rem;padding:12px">No authors found with this theme in their top 5</div>';return;}
+    mkBars(c,data,data[0][1],150,16,50);
+  });
+  if(THEMES[0])sel.value=THEMES[0][0],sel.dispatchEvent(new Event('change'));
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>दोहा संग्रह — विश्लेषण</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0808;
+    --bg2: #120f0f;
+    --bg3: #1c1616;
+    --gold: #c9a84c;
+    --gold2: #e8c96a;
+    --crimson: #c0392b;
+    --saffron: #f39c12;
+    --teal: #1abc9c;
+    --indigo: #6c5ce7;
+    --rose: #e84393;
+    --sage: #27ae60;
+    --sky: #3498db;
+    --text: #f0e8d8;
+    --muted: #8a7a6a;
+    --border: #2e2424;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tiro Devanagari Hindi', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    position: relative;
+  }
+  .header::after {
+    content: '';
+    display: block;
+    width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 24px auto 0;
+  }
+
+  .header-ornament {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  .header h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 400;
+    line-height: 1.2;
+    background: linear-gradient(135deg, var(--gold2), var(--saffron), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+
+  .header-sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+    padding: 0 20px 48px;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px 32px;
+    text-align: center;
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .stat-card:hover { border-color: var(--gold); }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent, var(--gold));
+  }
+  .stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--gold2);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  /* Section layout */
+  .section {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+
+  .section-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  .chart-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 28px;
+    position: relative;
+  }
+
+  .chart-title {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Bar chart */
+  .bar-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+    cursor: default;
+  }
+  .bar-label {
+    width: 120px;
+    font-size: 0.82rem;
+    color: var(--text);
+    text-align: right;
+    flex-shrink: 0;
+    line-height: 1.3;
+  }
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: var(--bg3);
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+  .bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent 80%, rgba(255,255,255,0.15));
+  }
+  .bar-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    flex-shrink: 0;
+    width: 40px;
+  }
+  .bar-row:hover .bar-label { color: var(--gold2); }
+
+  /* Treemap */
+  .treemap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 3px;
+    height: 320px;
+    overflow: hidden;
+  }
+
+  /* Heatmap */
+  .heatmap-wrap { overflow-x: auto; }
+  .heatmap {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 600px;
+  }
+  .heatmap th {
+    font-size: 0.65rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    padding: 6px 4px;
+    text-align: center;
+    font-weight: 400;
+  }
+  .heatmap td {
+    width: 60px;
+    height: 38px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: default;
+    position: relative;
+  }
+  .heatmap td:hover {
+    transform: scale(1.08);
+    z-index: 10;
+    box-shadow: 0 0 0 2px var(--gold);
+  }
+  .heatmap .row-label {
+    font-size: 0.72rem;
+    color: var(--text);
+    text-align: right;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-family: 'Tiro Devanagari Hindi', serif;
+    width: 160px;
+  }
+
+  /* Donut / Pie */
+  .donut-wrap { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .donut-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 140px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; cursor: default; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-label { color: var(--text); flex: 1; }
+  .legend-val { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.7rem; }
+
+  /* Author profile cards */
+  .author-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2px;
+  }
+  .author-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    transition: border-color 0.3s, background 0.3s;
+    cursor: default;
+  }
+  .author-card:hover {
+    border-color: var(--gold);
+    background: var(--bg3);
+  }
+  .author-name {
+    font-size: 1rem;
+    color: var(--gold2);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .author-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .author-themes { display: flex; flex-wrap: wrap; gap: 4px; }
+  .theme-chip {
+    font-size: 0.65rem;
+    padding: 2px 7px;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed;
+    background: #1c1616ee;
+    border: 1px solid var(--gold);
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    color: var(--text);
+    pointer-events: none;
+    z-index: 9999;
+    max-width: 220px;
+    line-height: 1.5;
+    backdrop-filter: blur(8px);
+    display: none;
+  }
+  #tooltip strong { color: var(--gold2); display: block; margin-bottom: 3px; }
+
+  /* Timeline / lollipop */
+  .lollipop-svg { width: 100%; overflow: visible; }
+
+  /* Divider */
+  .ornamental-divider {
+    text-align: center;
+    color: var(--gold);
+    font-size: 1.2rem;
+    opacity: 0.4;
+    padding: 20px 0 40px;
+    letter-spacing: 1em;
+  }
+
+  /* Fade-in animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .chart-box { animation: fadeUp 0.6s ease backwards; }
+  .chart-box:nth-child(1) { animation-delay: 0.1s; }
+  .chart-box:nth-child(2) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<div id="tooltip"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-ornament">❧ Literary Analytics ❧</div>
+  <h1>दोहा संग्रह विश्लेषण</h1>
+  <div class="header-sub">Hindi Doha Collection · Thematic & Authorial Exploration</div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-card" style="--accent: var(--gold);">
+    <span class="stat-num">7,889</span>
+    <div class="stat-label">कुल दोहे · Total Dohas</div>
+  </div>
+  <div class="stat-card" style="--accent: var(--crimson);">
+    <span class="stat-num">103</span>
+    <div class="stat-label">रचनाकार · Authors</div>
+  </div>
+  <div class="stat-card" style="--accent: var(--saffron);">
+    <span class="stat-num">99</span>
+    <div class="stat-label">विषय · Themes</div>
+  </div>
+  <div class="stat-card" style="--accent: var(--teal);">
+    <span class="stat-num">809</span>
+    <div class="stat-label">सर्वाधिक थीम · प्रेम</div>
+  </div>
+  <div class="stat-card" style="--accent: var(--indigo);">
+    <span class="stat-num">911</span>
+    <div class="stat-label">शीर्ष लेखक · रसलीन</div>
+  </div>
+</div>
+
+<!-- SECTION 1: THEMES -->
+<div class="section">
+  <div class="section-title">विषय वितरण · Theme Distribution</div>
+
+  <div class="grid-2">
+    <!-- Horizontal bar chart -->
+    <div class="chart-box">
+      <div class="chart-title">Top 15 Themes by Doha Count</div>
+      <div id="theme-bars"></div>
+    </div>
+
+    <!-- Bubble / treemap style -->
+    <div class="chart-box">
+      <div class="chart-title">Theme Landscape (proportional)</div>
+      <div id="theme-bubbles" style="position:relative; height:320px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: AUTHORS -->
+<div class="section">
+  <div class="section-title">रचनाकार · Top Authors</div>
+
+  <div class="grid-2" style="margin-bottom:2px">
+    <!-- Author bar chart -->
+    <div class="chart-box">
+      <div class="chart-title">Dohas per Author (Top 10)</div>
+      <div id="author-bars"></div>
+    </div>
+
+    <!-- Donut -->
+    <div class="chart-box">
+      <div class="chart-title">Author Share of Collection</div>
+      <div class="donut-wrap">
+        <canvas id="donut-canvas" width="220" height="220" style="flex-shrink:0;"></canvas>
+        <div class="donut-legend" id="donut-legend"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: HEATMAP -->
+<div class="section">
+  <div class="section-title">लेखक × विषय ताप-मानचित्र · Author × Theme Heatmap</div>
+  <div class="chart-box">
+    <div class="chart-title">Intensity of each author's engagement with top themes</div>
+    <div class="heatmap-wrap">
+      <table class="heatmap" id="heatmap"></table>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: AUTHOR PROFILES -->
+<div class="section">
+  <div class="section-title">रचनाकार प्रोफाइल · Author Profiles</div>
+  <div class="author-grid" id="author-profile-grid"></div>
+</div>
+
+<!-- SECTION 5: THEME CATEGORIES -->
+<div class="section">
+  <div class="section-title">विषय श्रेणियाँ · Thematic Categories</div>
+  <div class="grid-3" id="theme-categories"></div>
+</div>
+
+<div class="ornamental-divider">✦ ✦ ✦</div>
+
+<script>
+// ==================== DATA ====================
+const THEMES = [
+  ["प्रेम", 809], ["सामाजिक", 699], ["भक्ति", 641], ["नीति", 605],
+  ["विरह", 352], ["जीवन", 339], ["करुण", 327], ["शृंगार", 325],
+  ["सौंदर्य", 320], ["राजनीति", 309], ["प्रकृति", 216], ["रीति", 204],
+  ["ज्ञान", 167], ["ईश्वर", 161], ["वैराग्य", 123]
+];
+
+const AUTHORS = [
+  ["रसलीन", 911], ["दीनानाथ सुमित्र", 798], ["भारतेन्दु मिश्र", 698],
+  ["रंजना वर्मा", 643], ["धरनीदास", 510], ["रामेश्वर काम्बोज 'हिमांशु'", 378],
+  ["मुंशी रहमान खान", 234], ["कमलेश द्विवेदी", 120], ["बिहारी", 110], ["मनोज भावुक", 104]
+];
+
+const HEATMAP_AUTHORS = ["रसलीन","दीनानाथ सुमित्र","भारतेन्दु मिश्र","रंजना वर्मा","धरनीदास","रामेश्वर काम्बोज 'हिमांशु'","मुंशी रहमान खान","कमलेश द्विवेदी"];
+const HEATMAP_THEMES = ["प्रेम","सामाजिक","भक्ति","नीति","विरह","जीवन","करुण","शृंगार","सौंदर्य","राजनीति"];
+const MATRIX = {
+  "रसलीन":{"शृंगार":169,"सौंदर्य":177,"प्रेम":61,"सामाजिक":13,"जीवन":5,"विरह":88,"नीति":12,"भक्ति":16,"करुण":10,"राजनीति":0},
+  "धरनीदास":{"भक्ति":133,"नीति":32,"विरह":6,"प्रेम":11,"शृंगार":1,"सामाजिक":9,"करुण":1,"जीवन":3,"सौंदर्य":0,"राजनीति":0},
+  "रामेश्वर काम्बोज 'हिमांशु'":{"नीति":11,"सामाजिक":30,"जीवन":28,"प्रेम":150,"भक्ति":11,"विरह":27,"करुण":44,"राजनीति":10,"सौंदर्य":2,"शृंगार":5},
+  "मुंशी रहमान खान":{"भक्ति":29,"नीति":43,"सामाजिक":18,"जीवन":7,"राजनीति":2,"प्रेम":0,"विरह":0,"करुण":0,"शृंगार":0,"सौंदर्य":0},
+  "भारतेन्दु मिश्र":{"प्रेम":30,"विरह":15,"सामाजिक":141,"नीति":35,"करुण":96,"जीवन":65,"राजनीति":76,"भक्ति":7,"सौंदर्य":3,"शृंगार":6},
+  "दीनानाथ सुमित्र":{"जीवन":39,"सामाजिक":135,"प्रेम":79,"राजनीति":157,"नीति":36,"करुण":35,"सौंदर्य":8,"विरह":12,"भक्ति":22,"शृंगार":5},
+  "रंजना वर्मा":{"प्रेम":61,"विरह":32,"सौंदर्य":10,"सामाजिक":64,"करुण":42,"नीति":42,"जीवन":36,"भक्ति":71,"शृंगार":14,"राजनीति":10},
+  "कमलेश द्विवेदी":{"सामाजिक":5,"जीवन":8,"शृंगार":1,"भक्ति":4,"प्रेम":38,"विरह":13,"करुण":6,"नीति":7,"सौंदर्य":2,"राजनीति":1}
+};
+
+const AUTHOR_THEMES = {
+  "रसलीन": [["सौंदर्य",177],["शृंगार",169],["रीति",154],["विरह",88],["प्रेम",61]],
+  "दीनानाथ सुमित्र": [["राजनीति",157],["सामाजिक",135],["प्रेम",79],["जीवन",39],["नीति",36]],
+  "भारतेन्दु मिश्र": [["सामाजिक",141],["करुण",96],["राजनीति",76],["जीवन",65],["प्रकृति",46]],
+  "रंजना वर्मा": [["भक्ति",71],["सामाजिक",64],["प्रेम",61],["प्रकृति",57],["करुण",42]],
+  "धरनीदास": [["भक्ति",133],["ज्ञान",34],["साधना",34],["वैराग्य",33],["नीति",32]],
+  "रामेश्वर काम्बोज 'हिमांशु'": [["प्रेम",150],["करुण",44],["सामाजिक",30],["जीवन",28],["विरह",27]],
+  "मुंशी रहमान खान": [["नीति",43],["धर्म",33],["भक्ति",29],["सामाजिक",18],["शिक्षा",14]],
+  "कमलेश द्विवेदी": [["प्रेम",38],["विरह",13],["जीवन",8],["विश्वास",8],["नीति",7]],
+  "बिहारी": [["शृंगार",62],["प्रेम",28],["नीति",8],["भक्ति",6],["विरह",4]],
+  "मनोज भावुक": [["सामाजिक",31],["प्रेम",22],["जीवन",16],["नीति",11],["करुण",9]]
+};
+
+const THEME_CATEGORIES = [
+  { cat: "प्रेम व श्रृंगार", color: "#e84393", icon: "❤", themes: [["प्रेम",809],["विरह",352],["शृंगार",325],["सौंदर्य",320],["मिलन",61],["रीति",204]] },
+  { cat: "भक्ति व अध्यात्म", color: "#c9a84c", icon: "🪔", themes: [["भक्ति",641],["ईश्वर",161],["वैराग्य",123],["धर्म",111],["साधना",80],["कृष्ण",68]] },
+  { cat: "नीति व समाज", color: "#3498db", icon: "⚖", themes: [["सामाजिक",699],["नीति",605],["राजनीति",309],["ज्ञान",167],["शिक्षा",56],["उपदेश",100]] },
+  { cat: "जीवन दर्शन", color: "#27ae60", icon: "☯", themes: [["जीवन",339],["करुण",327],["दर्शन",111],["कर्म",99],["काल",88],["मृत्यु",47]] },
+  { cat: "प्रकृति व ऋतु", color: "#1abc9c", icon: "🌿", themes: [["प्रकृति",216],["वसंत",30],["ऋतु",32],["वर्षा",18],["चंद्र",7]] },
+  { cat: "अन्य विषय", color: "#6c5ce7", icon: "✦", themes: [["वीर",103],["गुरु",101],["संत",99],["आध्यात्म",91],["मोह",73]] }
+];
+
+const COLORS = ["#c9a84c","#e84393","#3498db","#27ae60","#f39c12","#1abc9c","#6c5ce7","#e74c3c","#16a085","#8e44ad"];
+const HEATMAP_COLORS = [[10,15,20],[192,56,43]]; // dark to crimson
+
+// ==================== TOOLTIP ====================
+const tooltip = document.getElementById('tooltip');
+function showTip(e, title, body) {
+  tooltip.innerHTML = `<strong>${title}</strong>${body}`;
+  tooltip.style.display = 'block';
+  moveTip(e);
+}
+function moveTip(e) {
+  let x = e.clientX + 14, y = e.clientY - 10;
+  if (x + 240 > window.innerWidth) x = e.clientX - 240;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTip() { tooltip.style.display = 'none'; }
+document.addEventListener('mousemove', e => { if (tooltip.style.display === 'block') moveTip(e); });
+
+// ==================== THEME BARS ====================
+function renderBars(containerId, data, colors, maxVal) {
+  const container = document.getElementById(containerId);
+  const max = maxVal || data[0][1];
+  data.forEach(([label, val], i) => {
+    const pct = (val / max * 100).toFixed(1);
+    const color = colors[i % colors.length];
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label">${label}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:0%; background: ${color};" data-target="${pct}"></div>
+      </div>
+      <div class="bar-val">${val}</div>`;
+    row.addEventListener('mouseenter', e => showTip(e, label, `${val} दोहे (${pct}% of top)`));
+    row.addEventListener('mouseleave', hideTip);
+    container.appendChild(row);
+  });
+  // Animate
+  setTimeout(() => {
+    document.querySelectorAll(`#${containerId} .bar-fill`).forEach(el => {
+      el.style.width = el.dataset.target + '%';
+    });
+  }, 200);
+}
+
+renderBars('theme-bars', THEMES, COLORS, THEMES[0][1]);
+renderBars('author-bars', AUTHORS, COLORS, AUTHORS[0][1]);
+
+// ==================== BUBBLE TREEMAP ====================
+function renderBubbles() {
+  const container = document.getElementById('theme-bubbles');
+  const W = container.offsetWidth || 500, H = 320;
+  const total = THEMES.reduce((s,[,v])=>s+v,0);
+  
+  // Simple packed rectangles
+  const items = THEMES.map(([t,v],i) => ({t,v,color:COLORS[i%COLORS.length]}));
+  
+  // Use a simple wrap layout
+  let x=0, y=0, rowH=0, pad=3;
+  items.forEach(item => {
+    const area = (item.v/total) * (W*H);
+    const size = Math.sqrt(area) * 1.05;
+    item.w = Math.max(size*1.2, 60);
+    item.h = Math.max(size*0.75, 36);
+    
+    if (x + item.w > W && x > 0) { y += rowH + pad; x = 0; rowH = 0; }
+    item.x = x; item.y = y;
+    x += item.w + pad;
+    rowH = Math.max(rowH, item.h);
+  });
+
+  items.forEach(item => {
+    const el = document.createElement('div');
+    el.style.cssText = `
+      position:absolute; left:${item.x}px; top:${item.y}px;
+      width:${item.w}px; height:${item.h}px;
+      background:${item.color}18;
+      border:1px solid ${item.color}66;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      cursor:default; transition: background 0.2s, border-color 0.2s;
+      overflow:hidden;
+    `;
+    el.innerHTML = `<div style="font-size:${Math.max(0.65, Math.min(0.9, item.w/120))}rem;color:${item.color};text-align:center;padding:2px 4px;line-height:1.3">${item.t}</div>
+                    <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:#8a7a6a">${item.v}</div>`;
+    el.addEventListener('mouseenter', e => { el.style.background = item.color+'33'; el.style.borderColor = item.color; showTip(e, item.t, `${item.v} दोहे`); });
+    el.addEventListener('mouseleave', () => { el.style.background = item.color+'18'; el.style.borderColor = item.color+'66'; hideTip(); });
+    container.appendChild(el);
+  });
+}
+renderBubbles();
+
+// ==================== DONUT CHART ====================
+function renderDonut() {
+  const canvas = document.getElementById('donut-canvas');
+  const ctx = canvas.getContext('2d');
+  const total = AUTHORS.reduce((s,[,v])=>s+v,0);
+  const cx=110, cy=110, r=90, inner=55;
+  let angle = -Math.PI/2;
+
+  AUTHORS.forEach(([name,val],i) => {
+    const slice = (val/total) * Math.PI * 2;
+    const color = COLORS[i];
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,angle,angle+slice);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.strokeStyle = '#0a0808';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    angle += slice;
+  });
+
+  // Inner circle
+  ctx.beginPath();
+  ctx.arc(cx,cy,inner,0,Math.PI*2);
+  ctx.fillStyle = '#0a0808';
+  ctx.fill();
+  ctx.fillStyle = '#c9a84c';
+  ctx.font = 'bold 22px DM Mono';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('10', cx, cy-8);
+  ctx.fillStyle = '#8a7a6a';
+  ctx.font = '10px DM Mono';
+  ctx.fillText('AUTHORS', cx, cy+10);
+
+  // Legend
+  const legend = document.getElementById('donut-legend');
+  AUTHORS.slice(0,8).forEach(([name,val],i) => {
+    const pct = ((val/total)*100).toFixed(1);
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.innerHTML = `<div class="legend-dot" style="background:${COLORS[i]}"></div>
+                      <div class="legend-label">${name.length>12?name.slice(0,12)+'…':name}</div>
+                      <div class="legend-val">${pct}%</div>`;
+    item.addEventListener('mouseenter', e => showTip(e, name, `${val} दोहे · ${pct}%`));
+    item.addEventListener('mouseleave', hideTip);
+    legend.appendChild(item);
+  });
+}
+renderDonut();
+
+// ==================== HEATMAP ====================
+function lerp(a, b, t) { return a + (b-a)*t; }
+function heatColor(val, max) {
+  if (!val) return '#0a0808';
+  const t = Math.pow(val/max, 0.6);
+  const r = Math.round(lerp(20, 192, t));
+  const g = Math.round(lerp(16, 56, t));
+  const b = Math.round(lerp(16, 43, t));
+  return `rgb(${r},${g},${b})`;
+}
+
+function renderHeatmap() {
+  const table = document.getElementById('heatmap');
+  const maxVal = Math.max(...HEATMAP_AUTHORS.flatMap(a => HEATMAP_THEMES.map(t => MATRIX[a]?.[t]||0)));
+
+  // Header
+  const thead = document.createElement('thead');
+  let hrow = '<tr><th style="width:160px"></th>';
+  HEATMAP_THEMES.forEach(t => { hrow += `<th>${t}</th>`; });
+  hrow += '</tr>';
+  thead.innerHTML = hrow;
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  HEATMAP_AUTHORS.forEach(author => {
+    const tr = document.createElement('tr');
+    let cells = `<td class="row-label">${author.length>14?author.slice(0,14)+'…':author}</td>`;
+    HEATMAP_THEMES.forEach(theme => {
+      const val = (MATRIX[author]||{})[theme]||0;
+      const bg = heatColor(val, maxVal);
+      const textColor = val/maxVal > 0.5 ? '#f0e8d8' : '#8a7a6a';
+      cells += `<td style="background:${bg};color:${textColor}" 
+                    data-author="${author}" data-theme="${theme}" data-val="${val}">
+                  ${val||''}
+                </td>`;
+    });
+    tr.innerHTML = cells;
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  // Hover
+  table.querySelectorAll('td[data-val]').forEach(td => {
+    td.addEventListener('mouseenter', e => {
+      const a=td.dataset.author, t=td.dataset.theme, v=td.dataset.val;
+      showTip(e, `${a}`, `${t}: ${v} दोहे`);
+    });
+    td.addEventListener('mouseleave', hideTip);
+  });
+}
+renderHeatmap();
+
+// ==================== AUTHOR PROFILES ====================
+function renderAuthorProfiles() {
+  const grid = document.getElementById('author-profile-grid');
+  AUTHORS.forEach(([name, count], i) => {
+    const themes = AUTHOR_THEMES[name] || [];
+    const card = document.createElement('div');
+    card.className = 'author-card';
+    const top = themes[0]?.[0] || '';
+    card.innerHTML = `
+      <div class="author-name">${name}</div>
+      <div class="author-count">${count} दोहे · Top: ${top}</div>
+      <div class="author-themes">
+        ${themes.map(([t,v]) => `<span class="theme-chip" style="border-color:${COLORS[i%COLORS.length]}44;color:${COLORS[i%COLORS.length]}">${t} (${v})</span>`).join('')}
+      </div>
+    `;
+    card.style.borderTopColor = COLORS[i % COLORS.length];
+    card.style.borderTopWidth = '2px';
+    grid.appendChild(card);
+  });
+}
+renderAuthorProfiles();
+
+// ==================== THEME CATEGORIES ====================
+function renderThemeCategories() {
+  const container = document.getElementById('theme-categories');
+  THEME_CATEGORIES.forEach(cat => {
+    const total = cat.themes.reduce((s,[,v])=>s+v,0);
+    const box = document.createElement('div');
+    box.className = 'chart-box';
+    box.style.borderTopColor = cat.color;
+    box.style.borderTopWidth = '2px';
+    
+    const themeRows = cat.themes.map(([t,v]) => {
+      const pct = (v/cat.themes[0][1]*100).toFixed(0);
+      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+        <span style="font-size:0.78rem;width:80px;flex-shrink:0">${t}</span>
+        <div style="flex:1;height:14px;background:#1c1616;position:relative">
+          <div style="width:${pct}%;height:100%;background:${cat.color};opacity:0.7;transition:width 1s"></div>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:#8a7a6a;width:30px">${v}</span>
+      </div>`;
+    }).join('');
+    
+    box.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <span style="font-size:1.2rem">${cat.icon}</span>
+        <div>
+          <div style="font-size:0.9rem;color:${cat.color}">${cat.cat}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:#8a7a6a">${total} दोहे कुल</div>
+        </div>
+      </div>
+      ${themeRows}
+    `;
+    container.appendChild(box);
+  });
+}
+renderThemeCategories();
+</script>
+</body>
+</html>

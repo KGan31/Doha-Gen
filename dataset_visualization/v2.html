@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>दोहा संग्रह — सम्पूर्ण विश्लेषण</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi:ital@0;1&family=Cinzel+Decorative:wght@400;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #09080a;
+  --bg2: #110f14;
+  --bg3: #1a1720;
+  --gold: #c9a84c;
+  --gold2: #e8c96a;
+  --text: #f0e8d8;
+  --muted: #7a6e8a;
+  --border: #2a2535;
+  --accent: #9b59b6;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Tiro Devanagari Hindi', serif;
+  min-height: 100vh;
+}
+
+/* NAV TABS */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: #09080aee;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 24px;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.nav-brand {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.65rem;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  margin-right: 16px;
+  padding: 14px 0;
+  white-space: nowrap;
+}
+.nav-tab {
+  padding: 14px 16px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  font-family: 'DM Mono', monospace;
+}
+.nav-tab:hover { color: var(--text); }
+.nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* PANELS */
+.panel { display: none; padding: 40px 24px 80px; max-width: 1400px; margin: 0 auto; }
+.panel.active { display: block; }
+
+/* HEADER */
+.page-header { text-align: center; padding: 20px 0 44px; }
+.page-header h1 {
+  font-size: clamp(1.8rem, 5vw, 3.5rem);
+  font-weight: 400;
+  background: linear-gradient(135deg, var(--gold2), #f39c12, var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.page-header p { color: var(--muted); font-style: italic; font-size: 0.9rem; margin-top: 8px; }
+
+/* STAT CARDS */
+.stats-row { display: flex; gap: 2px; flex-wrap: wrap; margin-bottom: 40px; }
+.stat-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 18px 24px; flex: 1; min-width: 130px;
+  border-top: 2px solid var(--accent-color, var(--gold));
+  transition: border-color 0.2s;
+}
+.stat-num { font-family: 'DM Mono', monospace; font-size: 2rem; color: var(--gold2); display: block; }
+.stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 3px; letter-spacing: 0.08em; }
+
+/* SECTION */
+.section-title {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.65rem; letter-spacing: 0.3em; color: var(--gold);
+  text-transform: uppercase; margin: 40px 0 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* CHART BOX */
+.chart-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 24px; margin-bottom: 2px;
+  animation: fadeUp 0.5s ease backwards;
+}
+.chart-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); margin-bottom: 20px; letter-spacing: 0.1em; }
+
+/* GRIDS */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+@media(max-width:900px) { .grid-2,.grid-3 { grid-template-columns: 1fr; } }
+
+/* BAR ROWS */
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; cursor: default; }
+.bar-label { font-size: 0.78rem; color: var(--text); text-align: right; flex-shrink:0; line-height:1.3; }
+.bar-track { flex:1; height:20px; background: var(--bg3); overflow: hidden; }
+.bar-fill { height: 100%; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
+.bar-val { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); flex-shrink:0; min-width:32px; }
+.bar-row:hover .bar-label { color: var(--gold2); }
+.bar-row:hover .bar-val { color: var(--gold2); }
+
+/* SEARCH */
+.search-box {
+  background: var(--bg3); border: 1px solid var(--border);
+  padding: 10px 16px; width: 100%; max-width: 400px;
+  color: var(--text); font-family: 'Tiro Devanagari Hindi', serif;
+  font-size: 0.9rem; outline: none; margin-bottom: 20px;
+  display: block;
+}
+.search-box:focus { border-color: var(--gold); }
+.search-box::placeholder { color: var(--muted); }
+
+/* AUTHOR CARDS */
+.author-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 2px; }
+.author-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  padding: 18px; cursor: default;
+  transition: border-color 0.2s, background 0.2s;
+  border-top-width: 2px;
+}
+.author-card:hover { background: var(--bg3); border-color: var(--card-color, var(--gold)); }
+.author-name { font-size: 0.95rem; color: var(--gold2); margin-bottom: 4px; line-height: 1.4; }
+.author-count { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-bottom: 10px; }
+.theme-chips { display: flex; flex-wrap: wrap; gap: 3px; }
+.theme-chip {
+  font-size: 0.62rem; padding: 2px 6px;
+  font-family: 'DM Mono', monospace;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 1px;
+}
+
+/* THEME TABLE */
+.theme-table { width: 100%; border-collapse: collapse; }
+.theme-table tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.theme-table tr:hover { background: var(--bg3); }
+.theme-table td { padding: 8px 12px; font-size: 0.82rem; }
+.theme-table td:nth-child(2) { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); text-align:right; }
+.theme-table td:nth-child(3) { width: 200px; }
+.rank-badge {
+  display: inline-block; width: 24px; height: 24px; border-radius: 50%;
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  line-height: 24px; text-align: center; margin-right: 6px;
+  background: var(--badge-bg, var(--bg3)); color: var(--muted);
+}
+.rank-badge.top3 { background: var(--gold); color: #0a0808; font-weight: bold; }
+
+/* HEATMAP */
+.heatmap-wrap { overflow-x: auto; }
+.heatmap { border-collapse: collapse; min-width: 900px; }
+.heatmap th {
+  font-size: 0.6rem; color: var(--muted);
+  font-family: 'DM Mono', monospace; padding: 6px 3px;
+  text-align: center; font-weight: 400; white-space: nowrap;
+}
+.heatmap td {
+  width: 44px; height: 32px; text-align: center;
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  cursor: default; transition: transform 0.15s;
+  border: 1px solid #09080a;
+}
+.heatmap td:hover { transform: scale(1.15); z-index: 10; position: relative; box-shadow: 0 0 0 2px var(--gold); }
+.heatmap .row-label {
+  font-size: 0.7rem; color: var(--text); text-align: right;
+  padding-right: 10px; white-space: nowrap;
+  font-family: 'Tiro Devanagari Hindi', serif; width: 180px;
+}
+
+/* TOOLTIP */
+#tooltip {
+  position: fixed; background: #1a1720ee; border: 1px solid var(--gold);
+  padding: 10px 14px; font-size: 0.78rem; color: var(--text);
+  pointer-events: none; z-index: 9999; max-width: 240px; line-height: 1.6;
+  backdrop-filter: blur(8px); display: none;
+}
+#tooltip strong { color: var(--gold2); display: block; margin-bottom: 2px; font-size: 0.85rem; }
+
+/* BUBBLE CHART */
+#bubble-container { position: relative; height: 380px; overflow: hidden; }
+
+/* DONUT */
+.donut-wrap { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.donut-legend { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; cursor: default; }
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.legend-label { flex: 1; }
+.legend-val { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); }
+
+/* FILTER BUTTONS */
+.filter-row { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 18px; }
+.filter-btn {
+  padding: 5px 12px; font-size: 0.68rem; border: 1px solid var(--border);
+  background: var(--bg3); color: var(--muted); cursor: pointer;
+  font-family: 'DM Mono', monospace; letter-spacing: 0.05em;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active { background: var(--gold); color: #0a0808; border-color: var(--gold); }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border); }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+</style>
+</head>
+<body>
+
+<div id="tooltip"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand">दोहा · विश्लेषण</div>
+  <div class="nav-tab active" onclick="showPanel('overview')">Overview</div>
+  <div class="nav-tab" onclick="showPanel('themes')">All 104 Themes</div>
+  <div class="nav-tab" onclick="showPanel('authors')">All 56 Authors</div>
+  <div class="nav-tab" onclick="showPanel('heatmap')">Author × Theme</div>
+  <div class="nav-tab" onclick="showPanel('explore')">Explore</div>
+</nav>
+
+<!-- PANEL: OVERVIEW -->
+<div class="panel active" id="panel-overview">
+  <div class="page-header">
+    <h1>दोहा संग्रह विश्लेषण</h1>
+    <p>Complete analysis · 7,889 dohas · 56 authors · 104 themes</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card" style="--accent-color:#c9a84c"><span class="stat-num">7,889</span><div class="stat-label">कुल दोहे · Total Dohas</div></div>
+    <div class="stat-card" style="--accent-color:#e84393"><span class="stat-num">56</span><div class="stat-label">रचनाकार · Authors</div></div>
+    <div class="stat-card" style="--accent-color:#3498db"><span class="stat-num">104</span><div class="stat-label">विषय · Unique Themes</div></div>
+    <div class="stat-card" style="--accent-color:#27ae60"><span class="stat-num">809</span><div class="stat-label">प्रेम — Most Common Theme</div></div>
+    <div class="stat-card" style="--accent-color:#f39c12"><span class="stat-num">911</span><div class="stat-label">रसलीन — Most Prolific</div></div>
+  </div>
+
+  <div class="section-title">Top 20 Themes</div>
+  <div class="grid-2">
+    <div class="chart-box">
+      <div class="chart-title">Themes by Doha Count (Top 20)</div>
+      <div id="ov-theme-bars"></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Theme Proportions — All 104</div>
+      <div id="bubble-container"></div>
+    </div>
+  </div>
+
+  <div class="section-title">Top Authors</div>
+  <div class="grid-2">
+    <div class="chart-box">
+      <div class="chart-title">All 56 Authors by Doha Count</div>
+      <div id="ov-author-bars" style="max-height:520px; overflow-y:auto;"></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Author Share of Collection (Top 15 labelled)</div>
+      <div class="donut-wrap">
+        <canvas id="donut-canvas" width="220" height="220" style="flex-shrink:0"></canvas>
+        <div class="donut-legend" id="donut-legend"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL: ALL THEMES -->
+<div class="panel" id="panel-themes">
+  <div class="section-title">सभी 104 विषय · All 104 Themes</div>
+
+  <div class="filter-row" id="theme-category-filters">
+    <button class="filter-btn active" onclick="filterThemes('all', this)">All</button>
+    <button class="filter-btn" onclick="filterThemes('love', this)">❤ प्रेम / Love</button>
+    <button class="filter-btn" onclick="filterThemes('devotion', this)">🪔 भक्ति / Devotion</button>
+    <button class="filter-btn" onclick="filterThemes('society', this)">⚖ समाज / Society</button>
+    <button class="filter-btn" onclick="filterThemes('philosophy', this)">☯ दर्शन / Philosophy</button>
+    <button class="filter-btn" onclick="filterThemes('nature', this)">🌿 प्रकृति / Nature</button>
+    <button class="filter-btn" onclick="filterThemes('rare', this)">✦ Rare (≤5)</button>
+  </div>
+
+  <input class="search-box" id="theme-search" placeholder="थीम खोजें · Search themes..." oninput="searchThemes(this.value)">
+
+  <div class="chart-box" style="padding:0;">
+    <table class="theme-table" id="themes-table">
+      <thead style="background:var(--bg3); border-bottom:2px solid var(--border);">
+        <tr>
+          <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted)"># Rank</td>
+          <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted)">विषय · Theme</td>
+          <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted);text-align:right">Count</td>
+          <td style="padding:10px 12px;font-family:'DM Mono',monospace;font-size:0.7rem;color:var(--muted)">Distribution</td>
+        </tr>
+      </thead>
+      <tbody id="themes-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="margin-top:40px">All Themes — Visual Bar Chart</div>
+  <div class="chart-box">
+    <div class="chart-title">All 104 themes (scroll to see all)</div>
+    <div id="all-theme-bars" style="max-height:900px; overflow-y:auto; padding-right:8px;"></div>
+  </div>
+</div>
+
+<!-- PANEL: ALL AUTHORS -->
+<div class="panel" id="panel-authors">
+  <div class="section-title">सभी 56 रचनाकार · All 56 Authors</div>
+
+  <input class="search-box" id="author-search" placeholder="लेखक खोजें · Search authors..." oninput="searchAuthors(this.value)">
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterAuthors('all',this)">All</button>
+    <button class="filter-btn" onclick="filterAuthors('major',this)">Major (≥100)</button>
+    <button class="filter-btn" onclick="filterAuthors('mid',this)">Mid (50–99)</button>
+    <button class="filter-btn" onclick="filterAuthors('minor',this)">Minor (&lt;50)</button>
+  </div>
+
+  <div class="author-grid" id="author-cards-grid"></div>
+</div>
+
+<!-- PANEL: HEATMAP -->
+<div class="panel" id="panel-heatmap">
+  <div class="section-title">लेखक × विषय · Author × Theme Matrix</div>
+  <div class="chart-box">
+    <div class="chart-title">All authors (rows) × Top 15 themes (columns) — hover for details</div>
+    <div class="heatmap-wrap">
+      <table class="heatmap" id="main-heatmap"></table>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:40px">Per-Author Theme Breakdown</div>
+  <div class="chart-box">
+    <div class="chart-title">Select an author to see their full theme breakdown</div>
+    <div class="filter-row" id="author-selector"></div>
+    <div id="author-detail-chart"></div>
+  </div>
+</div>
+
+<!-- PANEL: EXPLORE -->
+<div class="panel" id="panel-explore">
+  <div class="section-title">डेटा खोज · Data Explorer</div>
+
+  <div class="grid-2">
+    <div class="chart-box">
+      <div class="chart-title">Top Theme per Author</div>
+      <div id="explore-top-themes" style="max-height:500px;overflow-y:auto;"></div>
+    </div>
+    <div class="chart-box">
+      <div class="chart-title">Which Authors Write Most About Each Theme?</div>
+      <select id="theme-selector" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px;font-size:0.82rem;width:100%;margin-bottom:16px;outline:none;font-family:inherit;">
+        <option value="">— Select a theme —</option>
+      </select>
+      <div id="theme-authors-chart"></div>
+    </div>
+  </div>
+
+  <div class="section-title">थीम विविधता · Theme Diversity per Author</div>
+  <div class="chart-box">
+    <div class="chart-title">Number of unique themes each author has written about</div>
+    <div id="diversity-bars" style="max-height:600px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+const ALL_THEMES = [["प्रेम",809],["सामाजिक",699],["भक्ति",641],["नीति",605],["विरह",352],["जीवन",339],["करुण",327],["शृंगार",325],["सौंदर्य",320],["राजनीति",309],["प्रकृति",216],["रीति",204],["ज्ञान",167],["ईश्वर",161],["वैराग्य",123],["धर्म",111],["दर्शन",111],["वीर",103],["गुरु",101],["उपदेश",100],["कर्म",99],["संत",99],["आध्यात्म",91],["काल",88],["साधना",80],["नायिका",73],["मोह",73],["कृष्ण",68],["मिलन",61],["स्वभाव",61],["भाग्य",56],["शिक्षा",56],["संयम",50],["मृत्यु",47],["सत्य",47],["मित्रता",44],["धैर्य",43],["माया",40],["दान",37],["त्याग",34],["रूप",34],["ऋतु",32],["विवेक",32],["न्याय",31],["वसंत",30],["समय",27],["मोक्ष",26],["संसार",26],["शत्रुता",23],["शांत",21],["अद्भुत",18],["वर्षा",18],["हास्य",16],["विवाह",15],["रति",12],["मान",12],["भय",10],["रात",8],["दिवस",8],["विश्वास",8],["पाखंड",7],["पूजा",7],["चंद्र",7],["योग",6],["मन",6],["ईर्ष्या",6],["आशा",5],["रौद्र",5],["दया",4],["स्मृति",4],["लाज",4],["संगत",3],["अहंकार",3],["मंत्र",3],["संतोष",2],["पतन",2],["शक्ति",2],["तीर्थ",2],["जन्म",2],["शाम",2],["स्वतंत्रता",2],["रूठना",2],["ब्रह्म",2],["अध्यात्म",1],["आनंद",1],["अज्ञान",1],["वीभत्स",1],["सर्जन",1],["ममता",1],["शोषण",1],["कवि",1],["तप",1],["उत्सव",1],["दुःख",1],["अन्य",1],["व्यापार",1],["कला",1],["यौवन",1],["काम",1],["उत्कंठा",1],["लज्जा",1],["भ्रम",1]];
+
+const ALL_AUTHORS = [["रसलीन",911],["दीनानाथ सुमित्र",798],["भारतेन्दु मिश्र",698],["रंजना वर्मा",643],["धरनीदास",510],["रामेश्वर काम्बोज 'हिमांशु'",378],["मुंशी रहमान खान",234],["कमलेश द्विवेदी",120],["बिहारी",110],["मनोज भावुक",104],["मतिराम",100],["रत्नावली देवी",100],["राधावल्लभ पाण्डेय",100],["रामसहायदास 'राम'",100],["रामेश्वर शुक्ल 'करुण'",100],["रसनिधि",99],["विक्रमादित्य सिंह विक्रम",99],["रामचरित उपाध्याय",97],["तुलसीराम शर्मा 'दिनेश'",90],["दीनानाथ अशंक",90],["हरिप्रसाद द्विवेदी",90],["अम्बिकाप्रसाद वर्मा 'दिव्य'",89],["किशोरचन्द्र कपूर 'किशोर'",89],["चन्द्रभान सिंह 'रज'",89],["दुलारे लाल भार्गव",89],["बालकृष्ण शर्मा 'नवीन'",87],["जानकी प्रसाद द्विवेदी",81],["रामेश्वर काम्बोज 'हिमांशु'",80],["सुरंगमा यादव",79],["गरिमा सक्सेना",70],["रसखान",53],["विनय मिश्र",50],["हनुमानप्रसाद पोद्दार",46],["रश्मि विभा त्रिपाठी",46],["रूपम झा",45],["चंद्रसिंह बिरकाली",33],["राजेन्द्र वर्मा",33],["सुजान-रसखान",26],["गुरुचरण सिंह",25],["शिवपूजन सहाय",22],["कबीर",18],["अमन चाँदपुरी",18],["अभिषेक कुमार अम्बर",11],["अश्विनी कुमार 'आँसू'",10],["महावीर प्रसाद 'मधुप'",10],["राहुल शिवाय",9],["घाघ",9],["अनिरूद्ध",7],["रहीम",7],["आराधना शुक्ला",7],["रामरक्षा मिश्र विमल",6],["स्मिता तिवारी बलिया",5],["रैदास",4],["दिनेश बाबा",3],["कविता भट्ट",1]];
+
+const AUTHOR_TOP_THEMES = {"रसलीन":[["सौंदर्य",177],["शृंगार",169],["रीति",154],["विरह",88],["प्रेम",61]],"धरनीदास":[["भक्ति",133],["ज्ञान",34],["साधना",34],["वैराग्य",33],["नीति",32]],"रामेश्वर काम्बोज 'हिमांशु'":[["प्रेम",150],["करुण",44],["सामाजिक",30],["जीवन",28],["विरह",27]],"हनुमानप्रसाद पोद्दार":[["भक्ति",14],["ईश्वर",14],["रूप",6],["मोक्ष",2],["प्रेम",2]],"मुंशी रहमान खान":[["नीति",43],["धर्म",33],["भक्ति",29],["सामाजिक",18],["शिक्षा",14]],"रश्मि विभा त्रिपाठी":[["प्रेम",30],["मिलन",4],["भक्ति",2],["विरह",2],["शृंगार",1]],"अनिरूद्ध":[["नीति",2],["कर्म",2],["जीवन",2],["त्याग",1]],"सुरंगमा यादव":[["सामाजिक",21],["करुण",8],["नीति",8],["विरह",6],["प्रकृति",5]],"कविता भट्ट":[["वैराग्य",1]],"कबीर":[["नीति",3],["ज्ञान",2],["विवेक",2],["दर्शन",2],["भक्ति",2]],"भारतेन्दु मिश्र":[["सामाजिक",141],["करुण",96],["राजनीति",76],["जीवन",65],["प्रकृति",46]],"राहुल शिवाय":[["वसंत",3],["रति",2],["प्रकृति",1],["विरह",1],["प्रेम",1]],"गरिमा सक्सेना":[["सामाजिक",29],["करुण",13],["प्रेम",8],["न्याय",4],["शिक्षा",4]],"दीनानाथ सुमित्र":[["राजनीति",157],["सामाजिक",135],["प्रेम",79],["जीवन",39],["नीति",36]],"अश्विनी कुमार 'आँसू'":[["विरह",4],["सामाजिक",1],["नीति",1],["समय",1],["मिलन",1]],"चंद्रसिंह बिरकाली":[["प्रकृति",14],["विरह",6],["करुण",5],["वर्षा",3],["प्रेम",1]],"अभिषेक कुमार अम्बर":[["सामाजिक",4],["भक्ति",3],["पूजा",2],["नीति",2]],"रामरक्षा मिश्र विमल":[["नीति",2],["सामाजिक",2],["शृंगार",1],["दर्शन",1]],"गुरुचरण सिंह":[["सामाजिक",14],["राजनीति",3],["जीवन",3],["संसार",1],["धर्म",1]],"अम्बिकाप्रसाद वर्मा 'दिव्य'":[["विरह",27],["प्रेम",19],["शृंगार",7],["मोह",6],["भक्ति",5]],"किशोरचन्द्र कपूर 'किशोर'":[["भक्ति",21],["कृष्ण",10],["ईश्वर",10],["दर्शन",8],["कर्म",7]],"चन्द्रभान सिंह 'रज'":[["प्रेम",26],["भक्ति",23],["शृंगार",13],["सौंदर्य",7],["ईश्वर",4]],"जानकी प्रसाद द्विवेदी":[["नीति",21],["ज्ञान",10],["काल",7],["ईश्वर",6],["शृंगार",4]],"तुलसीराम शर्मा 'दिनेश'":[["भक्ति",26],["प्रेम",12],["सामाजिक",7],["ईश्वर",4],["आध्यात्म",3]],"दीनानाथ अशंक":[["नीति",24],["प्रेम",11],["कर्म",6],["जीवन",6],["सामाजिक",6]],"दुलारे लाल भार्गव":[["सामाजिक",12],["विरह",11],["प्रेम",7],["भक्ति",5],["करुण",5]],"बालकृष्ण शर्मा 'नवीन'":[["विरह",13],["करुण",11],["जीवन",10],["प्रेम",9],["दर्शन",7]],"मतिराम":[["प्रेम",17],["भक्ति",15],["शृंगार",12],["सौंदर्य",11],["विरह",10]],"रत्नावली देवी":[["नीति",35],["भक्ति",10],["सामाजिक",10],["प्रेम",9],["विवाह",6]],"रसनिधि":[["प्रेम",29],["सौंदर्य",14],["विरह",14],["भक्ति",11],["कृष्ण",7]],"राधावल्लभ पाण्डेय":[["नीति",26],["सामाजिक",25],["ईश्वर",10],["राजनीति",8],["दर्शन",5]],"रामचरित उपाध्याय":[["नीति",24],["भक्ति",17],["प्रेम",10],["शृंगार",6],["विरह",4]],"रामसहायदास 'राम'":[["सौंदर्य",20],["प्रेम",19],["शृंगार",17],["रूप",8],["भक्ति",7]],"रामेश्वर शुक्ल 'करुण'":[["सामाजिक",42],["करुण",13],["राजनीति",13],["जीवन",4],["शिक्षा",4]],"विक्रमादित्य सिंह विक्रम":[["शृंगार",19],["भक्ति",15],["प्रेम",13],["सौंदर्य",12],["रूप",6]],"हरिप्रसाद द्विवेदी":[["वीर",48],["सामाजिक",11],["नीति",4],["त्याग",3],["धर्म",3]],"रंजना वर्मा":[["भक्ति",71],["सामाजिक",64],["प्रेम",61],["प्रकृति",57],["करुण",42]],"घाघ":[["प्रकृति",9]],"कमलेश द्विवेदी":[["प्रेम",38],["विरह",13],["जीवन",8],["विश्वास",8],["नीति",7]],"महावीर प्रसाद 'मधुप'":[["नीति",5],["धैर्य",2],["ज्ञान",2],["वीर",1]],"दिनेश बाबा":[["हास्य",3]],"मनोज भावुक":[["जीवन",18],["सामाजिक",15],["शृंगार",11],["विरह",9],["प्रेम",7]],"राजेन्द्र वर्मा":[["प्रकृति",14],["जीवन",2],["सामाजिक",2],["राजनीति",2],["आध्यात्म",1]],"विनय मिश्र":[["जीवन",10],["सामाजिक",8],["नीति",4],["राजनीति",4],["कर्म",2]],"अमन चाँदपुरी":[["जीवन",5],["ईश्वर",2],["रीति",2],["करुण",2],["प्रेम",1]],"सुजान-रसखान":[["प्रेम",8],["सौंदर्य",7],["भक्ति",6],["शृंगार",2],["जीवन",1]],"रसखान":[["प्रेम",41],["भक्ति",9],["धर्म",1],["वैराग्य",1],["रीति",1]],"रहीम":[["विरह",2],["प्रेम",2],["सौंदर्य",1],["जीवन",1],["कृष्ण",1]],"बिहारी":[["प्रेम",20],["सौंदर्य",17],["विरह",14],["शृंगार",12],["नीति",7]],"आराधना शुक्ला":[["जीवन",7]],"रैदास":[["सामाजिक",2],["आध्यात्म",1],["भक्ति",1]],"शिवपूजन सहाय":[["भक्ति",14],["ईश्वर",6],["कृष्ण",2]],"स्मिता तिवारी बलिया":[["नीति",2],["करुण",1],["प्रेम",1],["उपदेश",1]],"रूपम झा":[["सामाजिक",17],["शिक्षा",4],["जीवन",3],["राजनीति",3],["सत्य",2]]};
+
+const COLORS = ["#c9a84c","#e84393","#3498db","#27ae60","#f39c12","#1abc9c","#6c5ce7","#e74c3c","#16a085","#8e44ad","#2ecc71","#e67e22","#1abc9c","#9b59b6","#d35400","#2980b9","#c0392b","#27ae60","#f1c40f","#7f8c8d","#e8c96a","#ff6b9d","#74b9ff","#a29bfe","#fd79a8","#6c5ce7","#00b894","#fdcb6e","#e17055","#b2bec3","#55efc4","#fab1a0","#81ecec","#a29bfe","#ffeaa7","#dfe6e9","#fd79a8","#6c5ce7","#00b894","#e84393","#3498db","#27ae60","#c9a84c","#e74c3c","#1abc9c","#8e44ad","#f39c12","#2c3e50","#16a085","#d35400","#7f8c8d","#c0392b","#2980b9","#27ae60","#f1c40f","#e67e22"];
+
+// THEME CATEGORIES
+const THEME_CATS = {
+  love: ["प्रेम","विरह","शृंगार","सौंदर्य","मिलन","रीति","नायिका","रति","मान","मोह","रूप","लाज","रूठना"],
+  devotion: ["भक्ति","ईश्वर","वैराग्य","धर्म","साधना","संत","आध्यात्म","कृष्ण","गुरु","मोक्ष","योग","पूजा","तीर्थ","ब्रह्म","तप","आध्यात्म","अध्यात्म"],
+  society: ["सामाजिक","नीति","राजनीति","उपदेश","शिक्षा","न्याय","शत्रुता","दान","मित्रता","विवाह","हास्य","स्वतंत्रता","शोषण","पाखंड","शक्ति"],
+  philosophy: ["जीवन","करुण","दर्शन","कर्म","काल","मृत्यु","सत्य","विवेक","माया","संसार","समय","धैर्य","भाग्य","संयम","त्याग","मन","अहंकार","संतोष","पतन","जन्म","आनंद","अज्ञान","दुःख","भ्रम","ममता","स्मृति"],
+  nature: ["प्रकृति","वसंत","ऋतु","वर्षा","चंद्र","रात","दिवस","शाम"],
+};
+
+// ============================================================
+//  TOOLTIP
+// ============================================================
+const tooltip = document.getElementById('tooltip');
+function showTip(e, title, body) {
+  tooltip.innerHTML = `<strong>${title}</strong>${body}`;
+  tooltip.style.display = 'block';
+  moveTip(e);
+}
+function moveTip(e) {
+  let x = e.clientX+14, y = e.clientY-10;
+  if (x+260 > window.innerWidth) x = e.clientX-260;
+  tooltip.style.left = x+'px'; tooltip.style.top = y+'px';
+}
+document.addEventListener('mousemove', e => { if(tooltip.style.display==='block') moveTip(e); });
+function hideTip() { tooltip.style.display='none'; }
+
+// ============================================================
+//  TABS
+// ============================================================
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ============================================================
+//  BAR CHART HELPER
+// ============================================================
+function makeBars(container, data, maxVal, labelWidth, heightPx) {
+  const max = maxVal || data[0][1];
+  const total = ALL_THEMES.reduce((s,[,v])=>s+v,0);
+  data.forEach(([label,val],i) => {
+    const pct = (val/max*100).toFixed(1);
+    const color = COLORS[i % COLORS.length];
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label" style="width:${labelWidth||120}px">${label}</div>
+      <div class="bar-track" style="height:${heightPx||18}px">
+        <div class="bar-fill" style="width:0%;background:${color}" data-pct="${pct}"></div>
+      </div>
+      <div class="bar-val">${val}</div>`;
+    row.addEventListener('mouseenter', e => showTip(e, label, `${val} दोहे · ${((val/total)*100).toFixed(1)}% of collection`));
+    row.addEventListener('mouseleave', hideTip);
+    container.appendChild(row);
+  });
+  setTimeout(() => {
+    container.querySelectorAll('.bar-fill[data-pct]').forEach(el => { el.style.width = el.dataset.pct+'%'; });
+  }, 150);
+}
+
+// ============================================================
+//  OVERVIEW
+// ============================================================
+makeBars(document.getElementById('ov-theme-bars'), ALL_THEMES.slice(0,20), ALL_THEMES[0][1], 100);
+makeBars(document.getElementById('ov-author-bars'), ALL_AUTHORS, ALL_AUTHORS[0][1], 150, 16);
+
+// Bubbles
+(function renderBubbles() {
+  const container = document.getElementById('bubble-container');
+  const W = container.offsetWidth || 600, H = 380;
+  const total = ALL_THEMES.reduce((s,[,v])=>s+v,0);
+  let x=0,y=0,rowH=0,pad=3;
+  ALL_THEMES.forEach(([t,v],i) => {
+    const area = (v/total)*(W*H)*1.1;
+    const sz = Math.sqrt(area);
+    const w = Math.max(sz*1.3, 40), h = Math.max(sz*0.7, 22);
+    if(x+w>W&&x>0){ y+=rowH+pad; x=0; rowH=0; }
+    const el = document.createElement('div');
+    const c = COLORS[i%COLORS.length];
+    el.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${c}18;border:1px solid ${c}55;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;cursor:default;transition:background 0.2s`;
+    el.innerHTML = `<div style="font-size:${Math.min(0.85,Math.max(0.55,w/140))}rem;color:${c};text-align:center;padding:2px 4px;line-height:1.2">${t}</div><div style="font-family:'DM Mono',monospace;font-size:0.55rem;color:#7a6e8a">${v}</div>`;
+    el.addEventListener('mouseenter',e=>{el.style.background=c+'33';showTip(e,t,`${v} दोहे`);});
+    el.addEventListener('mouseleave',()=>{el.style.background=c+'18';hideTip();});
+    container.appendChild(el);
+    x+=w+pad; rowH=Math.max(rowH,h);
+  });
+})();
+
+// Donut
+(function renderDonut() {
+  const canvas = document.getElementById('donut-canvas');
+  const ctx = canvas.getContext('2d');
+  const total = ALL_AUTHORS.reduce((s,[,v])=>s+v,0);
+  const cx=110,cy=110,r=90,inner=50;
+  let angle=-Math.PI/2;
+  ALL_AUTHORS.forEach(([name,val],i) => {
+    const slice=(val/total)*Math.PI*2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,angle,angle+slice); ctx.closePath();
+    ctx.fillStyle=COLORS[i%COLORS.length]; ctx.fill();
+    ctx.strokeStyle='#09080a'; ctx.lineWidth=2; ctx.stroke();
+    angle+=slice;
+  });
+  ctx.beginPath(); ctx.arc(cx,cy,inner,0,Math.PI*2); ctx.fillStyle='#09080a'; ctx.fill();
+  ctx.fillStyle='#e8c96a'; ctx.font='bold 20px DM Mono'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('56',cx,cy-8);
+  ctx.fillStyle='#7a6e8a'; ctx.font='9px DM Mono'; ctx.fillText('AUTHORS',cx,cy+8);
+  const legend = document.getElementById('donut-legend');
+  ALL_AUTHORS.slice(0,20).forEach(([name,val],i) => {
+    const pct=((val/total)*100).toFixed(1);
+    const item=document.createElement('div'); item.className='legend-item';
+    const short = name.length>16?name.slice(0,16)+'…':name;
+    item.innerHTML=`<div class="legend-dot" style="background:${COLORS[i%COLORS.length]}"></div><div class="legend-label">${short}</div><div class="legend-val">${pct}%</div>`;
+    item.addEventListener('mouseenter',e=>showTip(e,name,`${val} दोहे · ${pct}%`));
+    item.addEventListener('mouseleave',hideTip);
+    legend.appendChild(item);
+  });
+})();
+
+// ============================================================
+//  ALL THEMES TABLE
+// ============================================================
+let themesData = ALL_THEMES.map(([t,v],i)=>({t,v,i:i+1}));
+let filteredThemes = [...themesData];
+
+function renderThemesTable(data) {
+  const tbody = document.getElementById('themes-tbody');
+  tbody.innerHTML='';
+  const total = ALL_THEMES.reduce((s,[,v])=>s+v,0);
+  const max = ALL_THEMES[0][1];
+  data.forEach(({t,v,i}) => {
+    const pct=(v/total*100).toFixed(2);
+    const barW=(v/max*180).toFixed(0);
+    const c=COLORS[(i-1)%COLORS.length];
+    const rankClass = i<=3?'top3':'';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><span class="rank-badge ${rankClass}">${i}</span></td>
+      <td style="font-size:0.9rem">${t}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:0.75rem;color:var(--muted)">${v} <span style="opacity:0.5">(${pct}%)</span></td>
+      <td><div style="height:14px;background:${c};width:${barW}px;max-width:180px;transition:width 0.8s"></div></td>`;
+    tr.addEventListener('mouseenter',e=>showTip(e,t,`Rank #${i} · ${v} दोहे · ${pct}% of collection`));
+    tr.addEventListener('mouseleave',hideTip);
+    tbody.appendChild(tr);
+  });
+}
+renderThemesTable(themesData);
+
+// All theme bars
+makeBars(document.getElementById('all-theme-bars'), ALL_THEMES, ALL_THEMES[0][1], 110, 15);
+
+function filterThemes(cat, btn) {
+  document.querySelectorAll('#theme-category-filters .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(cat==='all') filteredThemes=[...themesData];
+  else if(cat==='rare') filteredThemes=themesData.filter(d=>d.v<=5);
+  else if(THEME_CATS[cat]) filteredThemes=themesData.filter(d=>THEME_CATS[cat].includes(d.t));
+  renderThemesTable(filteredThemes);
+}
+function searchThemes(q) {
+  const sq=q.trim().toLowerCase();
+  if(!sq){renderThemesTable(filteredThemes);return;}
+  renderThemesTable(filteredThemes.filter(d=>d.t.toLowerCase().includes(sq)||d.t.includes(q)));
+}
+
+// ============================================================
+//  ALL AUTHORS
+// ============================================================
+let allAuthorCards = [];
+function renderAuthorCards(data) {
+  const grid=document.getElementById('author-cards-grid');
+  grid.innerHTML='';
+  data.forEach(([name,count],i) => {
+    const themes=(AUTHOR_TOP_THEMES[name]||[]);
+    const card=document.createElement('div');
+    card.className='author-card';
+    const c=COLORS[i%COLORS.length];
+    card.style.borderTopColor=c; card.style.setProperty('--card-color',c);
+    const chips=themes.map(([t,v])=>`<span class="theme-chip" style="color:${c};border-color:${c}44">${t} (${v})</span>`).join('');
+    card.innerHTML=`<div class="author-name">${name}</div><div class="author-count">${count} दोहे · Top: ${themes[0]?themes[0][0]:'—'}</div><div class="theme-chips">${chips}</div>`;
+    grid.appendChild(card);
+    allAuthorCards.push({name,count,el:card,cat:count>=100?'major':count>=50?'mid':'minor'});
+  });
+}
+renderAuthorCards(ALL_AUTHORS);
+
+function filterAuthors(cat,btn){
+  document.querySelectorAll('#panel-authors .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  allAuthorCards.forEach(({el,cat:c})=>{el.style.display=(cat==='all'||cat===c)?'block':'none';});
+}
+function searchAuthors(q){
+  const sq=q.trim().toLowerCase();
+  allAuthorCards.forEach(({name,el})=>{el.style.display=(!sq||name.toLowerCase().includes(sq))?'block':'none';});
+}
+
+// ============================================================
+//  HEATMAP (all authors × top 15 themes)
+// ============================================================
+const HM_THEMES = ALL_THEMES.slice(0,15).map(([t])=>t);
+(function buildHeatmap(){
+  const table=document.getElementById('main-heatmap');
+  // Build author→theme lookup from top themes
+  const authorThemeLookup = {};
+  Object.entries(AUTHOR_TOP_THEMES).forEach(([a,pairs])=>{
+    authorThemeLookup[a]={};
+    pairs.forEach(([t,v])=>authorThemeLookup[a][t]=v);
+  });
+  const maxVal=Math.max(...ALL_AUTHORS.flatMap(([a])=>HM_THEMES.map(t=>(authorThemeLookup[a]||{})[t]||0)));
+
+  const thead=document.createElement('thead');
+  let hrow='<tr><th style="width:180px;text-align:right;padding-right:8px">Author</th>';
+  HM_THEMES.forEach(t=>hrow+=`<th style="max-width:44px;overflow:hidden">${t}</th>`);
+  hrow+='</tr>'; thead.innerHTML=hrow; table.appendChild(thead);
+
+  const tbody=document.createElement('tbody');
+  ALL_AUTHORS.forEach(([author,total])=>{
+    const lookup=authorThemeLookup[author]||{};
+    const tr=document.createElement('tr');
+    let cells=`<td class="row-label">${author.length>18?author.slice(0,18)+'…':author}</td>`;
+    HM_THEMES.forEach(theme=>{
+      const v=(lookup[theme]||0);
+      const t=v?Math.pow(v/maxVal,0.55):0;
+      const r=Math.round(9+t*183), g=Math.round(8+t*48), b=Math.round(10+t*33);
+      const tc=t>0.45?'#f0e8d8':'#7a6e8a';
+      cells+=`<td style="background:rgb(${r},${g},${b});color:${tc}" data-a="${author}" data-t="${theme}" data-v="${v}">${v||''}</td>`;
+    });
+    tr.innerHTML=cells; tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  table.querySelectorAll('td[data-v]').forEach(td=>{
+    td.addEventListener('mouseenter',e=>showTip(e,`${td.dataset.a}`,`${td.dataset.t}: ${td.dataset.v} दोहे`));
+    td.addEventListener('mouseleave',hideTip);
+  });
+})();
+
+// Author selector for detail
+(function buildAuthorSelector(){
+  const row=document.getElementById('author-selector');
+  ALL_AUTHORS.slice(0,20).forEach(([name])=>{
+    const btn=document.createElement('button');
+    btn.className='filter-btn';
+    btn.textContent=name.length>12?name.slice(0,12)+'…':name;
+    btn.title=name;
+    btn.onclick=()=>{
+      document.querySelectorAll('#author-selector .filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      showAuthorDetail(name);
+    };
+    row.appendChild(btn);
+  });
+})();
+function showAuthorDetail(author){
+  const chart=document.getElementById('author-detail-chart');
+  chart.innerHTML=`<div class="chart-title">${author} — All Themes</div>`;
+  const themes=AUTHOR_TOP_THEMES[author]||[];
+  if(!themes.length){chart.innerHTML+='<p style="color:var(--muted)">No data</p>';return;}
+  makeBars(chart, themes, themes[0][1], 120);
+}
+
+// ============================================================
+//  EXPLORE
+// ============================================================
+// Top theme per author list
+(function(){
+  const container=document.getElementById('explore-top-themes');
+  ALL_AUTHORS.forEach(([name,count],i)=>{
+    const top=(AUTHOR_TOP_THEMES[name]||[])[0];
+    if(!top)return;
+    const c=COLORS[i%COLORS.length];
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:default';
+    row.innerHTML=`<div style="width:10px;height:10px;border-radius:50%;background:${c};flex-shrink:0"></div>
+      <div style="flex:1;font-size:0.82rem">${name}</div>
+      <div style="font-size:0.75rem;color:${c};font-family:'DM Mono',monospace">${top[0]}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);min-width:30px;text-align:right">${top[1]}</div>`;
+    row.addEventListener('mouseenter',e=>showTip(e,name,`Top theme: ${top[0]} (${top[1]} दोहे) · Total: ${count}`));
+    row.addEventListener('mouseleave',hideTip);
+    container.appendChild(row);
+  });
+})();
+
+// Theme → authors selector
+(function(){
+  const sel=document.getElementById('theme-selector');
+  ALL_THEMES.forEach(([t])=>{
+    const opt=document.createElement('option');
+    opt.value=t; opt.textContent=t;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change',()=>{
+    const theme=sel.value;
+    const chart=document.getElementById('theme-authors-chart');
+    chart.innerHTML='';
+    if(!theme)return;
+    const authorData=[];
+    ALL_AUTHORS.forEach(([name])=>{
+      const themes=AUTHOR_TOP_THEMES[name]||[];
+      const found=themes.find(([t])=>t===theme);
+      if(found) authorData.push([name,found[1]]);
+    });
+    authorData.sort((a,b)=>b[1]-a[1]);
+    if(!authorData.length){chart.innerHTML='<p style="color:var(--muted);font-size:0.8rem">No data found for this theme in top-5 per author</p>';return;}
+    makeBars(chart,authorData,authorData[0][1],140);
+  });
+})();
+
+// Diversity bars
+(function(){
+  const container=document.getElementById('diversity-bars');
+  const divData=ALL_AUTHORS.map(([name,count])=>{
+    const n=(AUTHOR_TOP_THEMES[name]||[]).length;
+    return [name,n,count];
+  }).sort((a,b)=>b[1]-a[1]);
+  const max=divData[0][1];
+  divData.forEach(([name,n,total],i)=>{
+    const c=COLORS[i%COLORS.length];
+    const row=document.createElement('div');
+    row.className='bar-row';
+    row.innerHTML=`<div class="bar-label" style="width:150px">${name.length>16?name.slice(0,16)+'…':name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:0%;background:${c}" data-pct="${(n/max*100).toFixed(0)}"></div></div>
+      <div class="bar-val">${n} themes</div>`;
+    row.addEventListener('mouseenter',e=>showTip(e,name,`${n} unique themes · ${total} total dohas`));
+    row.addEventListener('mouseleave',hideTip);
+    container.appendChild(row);
+  });
+  setTimeout(()=>{
+    container.querySelectorAll('.bar-fill[data-pct]').forEach(el=>el.style.width=el.dataset.pct+'%');
+  },200);
+})();
+</script>
+</body>
+</html>
