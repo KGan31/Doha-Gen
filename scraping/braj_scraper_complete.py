@@ -1,7 +1,3 @@
-"""
-Complete Braj Bhasha Poetry Scraper
-Extracts: Poet Name | Poem Title | Poem URL | Poem Content
-"""
 
 import requests
 from bs4 import BeautifulSoup
