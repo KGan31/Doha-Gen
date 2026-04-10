@@ -19,10 +19,10 @@ The system fine-tunes `ai4bharat/IndicBART` on a curated dataset of ~7,000 annot
 ---
 ### Link to Models and Dataset
 
-- Poems Dataset: https://huggingface.co/datasets/KGan31/Doha-Gen-Dataset  
-- Poems Complete Merged Dataset: https://www.kaggle.com/datasets/kgan31/complete-kavita-dataset/data
-- Stage-1 Trained byT5 model: https://huggingface.co/KGan31/Doha-Gen/tree/main
-
+- Doha Dataset: https://www.kaggle.com/datasets/kgan31/doha-simple-context/  
+- Poems Dataset: https://www.kaggle.com/datasets/kgan31/complete-kavita-dataset/data
+- byT5 model: https://huggingface.co/KGan31/Doha-Gen-Stage2_Matra_loss_integrated/
+- Custom Transformer Model: https://huggingface.co/nikpatidar333/doha-generation-model_v2
 ---
 
 ## Authors
